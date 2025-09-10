@@ -3,7 +3,7 @@
 
 module gpio_ctrl_csr (
         input wire clk,
-        input wire rst,
+        input wire arst_n,
 
         input wire s_apb_psel,
         input wire s_apb_penable,
@@ -40,8 +40,8 @@ module gpio_ctrl_csr (
 
     // Request
     logic is_active;
-    always_ff @(posedge clk) begin
-        if(rst) begin
+    always_ff @(posedge clk or negedge arst_n) begin
+        if(~arst_n) begin
             is_active <= '0;
             cpuif_req <= '0;
             cpuif_req_is_wr <= '0;
@@ -155,8 +155,8 @@ module gpio_ctrl_csr (
         field_combo.OUTPUT_CTRL_VALUE.OVALUE.next = next_c;
         field_combo.OUTPUT_CTRL_VALUE.OVALUE.load_next = load_next_c;
     end
-    always_ff @(posedge clk) begin
-        if(rst) begin
+    always_ff @(posedge clk or negedge arst_n) begin
+        if(~arst_n) begin
             field_storage.OUTPUT_CTRL_VALUE.OVALUE.value <= 32'h0;
         end else begin
             if(field_combo.OUTPUT_CTRL_VALUE.OVALUE.load_next) begin
@@ -178,8 +178,8 @@ module gpio_ctrl_csr (
         field_combo.OUTPUT_CTRL_ENABLE.OENABLE.next = next_c;
         field_combo.OUTPUT_CTRL_ENABLE.OENABLE.load_next = load_next_c;
     end
-    always_ff @(posedge clk) begin
-        if(rst) begin
+    always_ff @(posedge clk or negedge arst_n) begin
+        if(~arst_n) begin
             field_storage.OUTPUT_CTRL_ENABLE.OENABLE.value <= 32'h0;
         end else begin
             if(field_combo.OUTPUT_CTRL_ENABLE.OENABLE.load_next) begin
