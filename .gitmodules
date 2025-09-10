@@ -1,0 +1,3 @@
+[submodule "ip/flows"]
+	path = ip/flows
+	url = https://github.com/tamarack-silicon/flows.git
