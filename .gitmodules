@@ -1,3 +1,6 @@
 [submodule "ip/flows"]
 	path = ip/flows
 	url = https://github.com/tamarack-silicon/flows.git
+[submodule "ip/uvm"]
+	path = ip/uvm
+	url = https://github.com/accellera-official/uvm-core.git
