@@ -1,1 +1,2 @@
+gpio_ctrl_csr_ral_pkg.sv
 gpio_controller_verif_tb.sv
