@@ -9,7 +9,7 @@ module gpio_ctrl_csr (
         input wire s_apb_penable,
         input wire s_apb_pwrite,
         input wire [2:0] s_apb_pprot,
-        input wire [3:0] s_apb_paddr,
+        input wire [10:0] s_apb_paddr,
         input wire [31:0] s_apb_pwdata,
         input wire [3:0] s_apb_pstrb,
         output logic s_apb_pready,
@@ -25,7 +25,7 @@ module gpio_ctrl_csr (
     //--------------------------------------------------------------------------
     logic cpuif_req;
     logic cpuif_req_is_wr;
-    logic [3:0] cpuif_addr;
+    logic [10:0] cpuif_addr;
     logic [31:0] cpuif_wr_data;
     logic [31:0] cpuif_wr_biten;
     logic cpuif_req_stall_wr;
@@ -54,7 +54,7 @@ module gpio_ctrl_csr (
                     is_active <= '1;
                     cpuif_req <= '1;
                     cpuif_req_is_wr <= s_apb_pwrite;
-                    cpuif_addr <= {s_apb_paddr[3:2], 2'b0};
+                    cpuif_addr <= {s_apb_paddr[10:2], 2'b0};
                     cpuif_wr_data <= s_apb_pwdata;
                     for(int i=0; i<4; i++) begin
                         cpuif_wr_biten[i*8 +: 8] <= {8{s_apb_pstrb[i]}};
@@ -87,9 +87,13 @@ module gpio_ctrl_csr (
     // Address Decode
     //--------------------------------------------------------------------------
     typedef struct {
-        logic OUTPUT_CTRL_VALUE;
-        logic OUTPUT_CTRL_ENABLE;
-        logic INPUT_STATUS;
+        logic output_data[8];
+        logic output_enable[8];
+        logic input_data[8];
+        logic posedge_intr_enable[8];
+        logic negedge_intr_enable[8];
+        logic posedge_intr_status[8];
+        logic negedge_intr_status[8];
     } decoded_reg_strb_t;
     decoded_reg_strb_t decoded_reg_strb;
     logic decoded_req;
@@ -98,9 +102,27 @@ module gpio_ctrl_csr (
     logic [31:0] decoded_wr_biten;
 
     always_comb begin
-        decoded_reg_strb.OUTPUT_CTRL_VALUE = cpuif_req_masked & (cpuif_addr == 4'h0);
-        decoded_reg_strb.OUTPUT_CTRL_ENABLE = cpuif_req_masked & (cpuif_addr == 4'h4);
-        decoded_reg_strb.INPUT_STATUS = cpuif_req_masked & (cpuif_addr == 4'h8);
+        for(int i0=0; i0<8; i0++) begin
+            decoded_reg_strb.output_data[i0] = cpuif_req_masked & (cpuif_addr == 11'h0 + (11)'(i0) * 11'h4);
+        end
+        for(int i0=0; i0<8; i0++) begin
+            decoded_reg_strb.output_enable[i0] = cpuif_req_masked & (cpuif_addr == 11'h100 + (11)'(i0) * 11'h4);
+        end
+        for(int i0=0; i0<8; i0++) begin
+            decoded_reg_strb.input_data[i0] = cpuif_req_masked & (cpuif_addr == 11'h200 + (11)'(i0) * 11'h4);
+        end
+        for(int i0=0; i0<8; i0++) begin
+            decoded_reg_strb.posedge_intr_enable[i0] = cpuif_req_masked & (cpuif_addr == 11'h300 + (11)'(i0) * 11'h4);
+        end
+        for(int i0=0; i0<8; i0++) begin
+            decoded_reg_strb.negedge_intr_enable[i0] = cpuif_req_masked & (cpuif_addr == 11'h400 + (11)'(i0) * 11'h4);
+        end
+        for(int i0=0; i0<8; i0++) begin
+            decoded_reg_strb.posedge_intr_status[i0] = cpuif_req_masked & (cpuif_addr == 11'h500 + (11)'(i0) * 11'h4);
+        end
+        for(int i0=0; i0<8; i0++) begin
+            decoded_reg_strb.negedge_intr_status[i0] = cpuif_req_masked & (cpuif_addr == 11'h600 + (11)'(i0) * 11'h4);
+        end
     end
 
     // Pass down signals to next stage
@@ -117,14 +139,38 @@ module gpio_ctrl_csr (
             struct {
                 logic [31:0] next;
                 logic load_next;
-            } OVALUE;
-        } OUTPUT_CTRL_VALUE;
+            } odata;
+        } output_data[8];
         struct {
             struct {
                 logic [31:0] next;
                 logic load_next;
-            } OENABLE;
-        } OUTPUT_CTRL_ENABLE;
+            } oenable;
+        } output_enable[8];
+        struct {
+            struct {
+                logic [31:0] next;
+                logic load_next;
+            } intr_enable;
+        } posedge_intr_enable[8];
+        struct {
+            struct {
+                logic [31:0] next;
+                logic load_next;
+            } intr_enable;
+        } negedge_intr_enable[8];
+        struct {
+            struct {
+                logic [31:0] next;
+                logic load_next;
+            } intr_status;
+        } posedge_intr_status[8];
+        struct {
+            struct {
+                logic [31:0] next;
+                logic load_next;
+            } intr_status;
+        } negedge_intr_status[8];
     } field_combo_t;
     field_combo_t field_combo;
 
@@ -132,62 +178,170 @@ module gpio_ctrl_csr (
         struct {
             struct {
                 logic [31:0] value;
-            } OVALUE;
-        } OUTPUT_CTRL_VALUE;
+            } odata;
+        } output_data[8];
         struct {
             struct {
                 logic [31:0] value;
-            } OENABLE;
-        } OUTPUT_CTRL_ENABLE;
+            } oenable;
+        } output_enable[8];
+        struct {
+            struct {
+                logic [31:0] value;
+            } intr_enable;
+        } posedge_intr_enable[8];
+        struct {
+            struct {
+                logic [31:0] value;
+            } intr_enable;
+        } negedge_intr_enable[8];
+        struct {
+            struct {
+                logic [31:0] value;
+            } intr_status;
+        } posedge_intr_status[8];
+        struct {
+            struct {
+                logic [31:0] value;
+            } intr_status;
+        } negedge_intr_status[8];
     } field_storage_t;
     field_storage_t field_storage;
 
-    // Field: gpio_ctrl_csr.OUTPUT_CTRL_VALUE.OVALUE
-    always_comb begin
-        automatic logic [31:0] next_c;
-        automatic logic load_next_c;
-        next_c = field_storage.OUTPUT_CTRL_VALUE.OVALUE.value;
-        load_next_c = '0;
-        if(decoded_reg_strb.OUTPUT_CTRL_VALUE && decoded_req_is_wr) begin // SW write
-            next_c = (field_storage.OUTPUT_CTRL_VALUE.OVALUE.value & ~decoded_wr_biten[31:0]) | (decoded_wr_data[31:0] & decoded_wr_biten[31:0]);
-            load_next_c = '1;
+    for(genvar i0=0; i0<8; i0++) begin
+        // Field: gpio_ctrl_csr.output_data[].odata
+        always_comb begin
+            automatic logic [31:0] next_c;
+            automatic logic load_next_c;
+            next_c = field_storage.output_data[i0].odata.value;
+            load_next_c = '0;
+            if(decoded_reg_strb.output_data[i0] && decoded_req_is_wr) begin // SW write
+                next_c = (field_storage.output_data[i0].odata.value & ~decoded_wr_biten[31:0]) | (decoded_wr_data[31:0] & decoded_wr_biten[31:0]);
+                load_next_c = '1;
+            end
+            field_combo.output_data[i0].odata.next = next_c;
+            field_combo.output_data[i0].odata.load_next = load_next_c;
         end
-        field_combo.OUTPUT_CTRL_VALUE.OVALUE.next = next_c;
-        field_combo.OUTPUT_CTRL_VALUE.OVALUE.load_next = load_next_c;
-    end
-    always_ff @(posedge clk or negedge arst_n) begin
-        if(~arst_n) begin
-            field_storage.OUTPUT_CTRL_VALUE.OVALUE.value <= 32'h0;
-        end else begin
-            if(field_combo.OUTPUT_CTRL_VALUE.OVALUE.load_next) begin
-                field_storage.OUTPUT_CTRL_VALUE.OVALUE.value <= field_combo.OUTPUT_CTRL_VALUE.OVALUE.next;
+        always_ff @(posedge clk or negedge arst_n) begin
+            if(~arst_n) begin
+                field_storage.output_data[i0].odata.value <= 32'h0;
+            end else begin
+                if(field_combo.output_data[i0].odata.load_next) begin
+                    field_storage.output_data[i0].odata.value <= field_combo.output_data[i0].odata.next;
+                end
             end
         end
+        assign hwif_out.output_data[i0].odata.value = field_storage.output_data[i0].odata.value;
     end
-    assign hwif_out.OUTPUT_CTRL_VALUE.OVALUE.value = field_storage.OUTPUT_CTRL_VALUE.OVALUE.value;
-    // Field: gpio_ctrl_csr.OUTPUT_CTRL_ENABLE.OENABLE
-    always_comb begin
-        automatic logic [31:0] next_c;
-        automatic logic load_next_c;
-        next_c = field_storage.OUTPUT_CTRL_ENABLE.OENABLE.value;
-        load_next_c = '0;
-        if(decoded_reg_strb.OUTPUT_CTRL_ENABLE && decoded_req_is_wr) begin // SW write
-            next_c = (field_storage.OUTPUT_CTRL_ENABLE.OENABLE.value & ~decoded_wr_biten[31:0]) | (decoded_wr_data[31:0] & decoded_wr_biten[31:0]);
-            load_next_c = '1;
+    for(genvar i0=0; i0<8; i0++) begin
+        // Field: gpio_ctrl_csr.output_enable[].oenable
+        always_comb begin
+            automatic logic [31:0] next_c;
+            automatic logic load_next_c;
+            next_c = field_storage.output_enable[i0].oenable.value;
+            load_next_c = '0;
+            if(decoded_reg_strb.output_enable[i0] && decoded_req_is_wr) begin // SW write
+                next_c = (field_storage.output_enable[i0].oenable.value & ~decoded_wr_biten[31:0]) | (decoded_wr_data[31:0] & decoded_wr_biten[31:0]);
+                load_next_c = '1;
+            end
+            field_combo.output_enable[i0].oenable.next = next_c;
+            field_combo.output_enable[i0].oenable.load_next = load_next_c;
         end
-        field_combo.OUTPUT_CTRL_ENABLE.OENABLE.next = next_c;
-        field_combo.OUTPUT_CTRL_ENABLE.OENABLE.load_next = load_next_c;
-    end
-    always_ff @(posedge clk or negedge arst_n) begin
-        if(~arst_n) begin
-            field_storage.OUTPUT_CTRL_ENABLE.OENABLE.value <= 32'h0;
-        end else begin
-            if(field_combo.OUTPUT_CTRL_ENABLE.OENABLE.load_next) begin
-                field_storage.OUTPUT_CTRL_ENABLE.OENABLE.value <= field_combo.OUTPUT_CTRL_ENABLE.OENABLE.next;
+        always_ff @(posedge clk or negedge arst_n) begin
+            if(~arst_n) begin
+                field_storage.output_enable[i0].oenable.value <= 32'h0;
+            end else begin
+                if(field_combo.output_enable[i0].oenable.load_next) begin
+                    field_storage.output_enable[i0].oenable.value <= field_combo.output_enable[i0].oenable.next;
+                end
             end
         end
+        assign hwif_out.output_enable[i0].oenable.value = field_storage.output_enable[i0].oenable.value;
     end
-    assign hwif_out.OUTPUT_CTRL_ENABLE.OENABLE.value = field_storage.OUTPUT_CTRL_ENABLE.OENABLE.value;
+    for(genvar i0=0; i0<8; i0++) begin
+        // Field: gpio_ctrl_csr.posedge_intr_enable[].intr_enable
+        always_comb begin
+            automatic logic [31:0] next_c;
+            automatic logic load_next_c;
+            next_c = field_storage.posedge_intr_enable[i0].intr_enable.value;
+            load_next_c = '0;
+            if(decoded_reg_strb.posedge_intr_enable[i0] && decoded_req_is_wr) begin // SW write
+                next_c = (field_storage.posedge_intr_enable[i0].intr_enable.value & ~decoded_wr_biten[31:0]) | (decoded_wr_data[31:0] & decoded_wr_biten[31:0]);
+                load_next_c = '1;
+            end
+            field_combo.posedge_intr_enable[i0].intr_enable.next = next_c;
+            field_combo.posedge_intr_enable[i0].intr_enable.load_next = load_next_c;
+        end
+        always_ff @(posedge clk) begin
+            if(field_combo.posedge_intr_enable[i0].intr_enable.load_next) begin
+                field_storage.posedge_intr_enable[i0].intr_enable.value <= field_combo.posedge_intr_enable[i0].intr_enable.next;
+            end
+        end
+        assign hwif_out.posedge_intr_enable[i0].intr_enable.value = field_storage.posedge_intr_enable[i0].intr_enable.value;
+    end
+    for(genvar i0=0; i0<8; i0++) begin
+        // Field: gpio_ctrl_csr.negedge_intr_enable[].intr_enable
+        always_comb begin
+            automatic logic [31:0] next_c;
+            automatic logic load_next_c;
+            next_c = field_storage.negedge_intr_enable[i0].intr_enable.value;
+            load_next_c = '0;
+            if(decoded_reg_strb.negedge_intr_enable[i0] && decoded_req_is_wr) begin // SW write
+                next_c = (field_storage.negedge_intr_enable[i0].intr_enable.value & ~decoded_wr_biten[31:0]) | (decoded_wr_data[31:0] & decoded_wr_biten[31:0]);
+                load_next_c = '1;
+            end
+            field_combo.negedge_intr_enable[i0].intr_enable.next = next_c;
+            field_combo.negedge_intr_enable[i0].intr_enable.load_next = load_next_c;
+        end
+        always_ff @(posedge clk) begin
+            if(field_combo.negedge_intr_enable[i0].intr_enable.load_next) begin
+                field_storage.negedge_intr_enable[i0].intr_enable.value <= field_combo.negedge_intr_enable[i0].intr_enable.next;
+            end
+        end
+        assign hwif_out.negedge_intr_enable[i0].intr_enable.value = field_storage.negedge_intr_enable[i0].intr_enable.value;
+    end
+    for(genvar i0=0; i0<8; i0++) begin
+        // Field: gpio_ctrl_csr.posedge_intr_status[].intr_status
+        always_comb begin
+            automatic logic [31:0] next_c;
+            automatic logic load_next_c;
+            next_c = field_storage.posedge_intr_status[i0].intr_status.value;
+            load_next_c = '0;
+            if(decoded_reg_strb.posedge_intr_status[i0] && decoded_req_is_wr) begin // SW write
+                next_c = (field_storage.posedge_intr_status[i0].intr_status.value & ~decoded_wr_biten[31:0]) | (decoded_wr_data[31:0] & decoded_wr_biten[31:0]);
+                load_next_c = '1;
+            end
+            field_combo.posedge_intr_status[i0].intr_status.next = next_c;
+            field_combo.posedge_intr_status[i0].intr_status.load_next = load_next_c;
+        end
+        always_ff @(posedge clk) begin
+            if(field_combo.posedge_intr_status[i0].intr_status.load_next) begin
+                field_storage.posedge_intr_status[i0].intr_status.value <= field_combo.posedge_intr_status[i0].intr_status.next;
+            end
+        end
+        assign hwif_out.posedge_intr_status[i0].intr_status.value = field_storage.posedge_intr_status[i0].intr_status.value;
+    end
+    for(genvar i0=0; i0<8; i0++) begin
+        // Field: gpio_ctrl_csr.negedge_intr_status[].intr_status
+        always_comb begin
+            automatic logic [31:0] next_c;
+            automatic logic load_next_c;
+            next_c = field_storage.negedge_intr_status[i0].intr_status.value;
+            load_next_c = '0;
+            if(decoded_reg_strb.negedge_intr_status[i0] && decoded_req_is_wr) begin // SW write
+                next_c = (field_storage.negedge_intr_status[i0].intr_status.value & ~decoded_wr_biten[31:0]) | (decoded_wr_data[31:0] & decoded_wr_biten[31:0]);
+                load_next_c = '1;
+            end
+            field_combo.negedge_intr_status[i0].intr_status.next = next_c;
+            field_combo.negedge_intr_status[i0].intr_status.load_next = load_next_c;
+        end
+        always_ff @(posedge clk) begin
+            if(field_combo.negedge_intr_status[i0].intr_status.load_next) begin
+                field_storage.negedge_intr_status[i0].intr_status.value <= field_combo.negedge_intr_status[i0].intr_status.next;
+            end
+        end
+        assign hwif_out.negedge_intr_status[i0].intr_status.value = field_storage.negedge_intr_status[i0].intr_status.value;
+    end
 
     //--------------------------------------------------------------------------
     // Write response
@@ -205,10 +359,28 @@ module gpio_ctrl_csr (
     logic [31:0] readback_data;
 
     // Assign readback values to a flattened array
-    logic [31:0] readback_array[3];
-    assign readback_array[0][31:0] = (decoded_reg_strb.OUTPUT_CTRL_VALUE && !decoded_req_is_wr) ? field_storage.OUTPUT_CTRL_VALUE.OVALUE.value : '0;
-    assign readback_array[1][31:0] = (decoded_reg_strb.OUTPUT_CTRL_ENABLE && !decoded_req_is_wr) ? field_storage.OUTPUT_CTRL_ENABLE.OENABLE.value : '0;
-    assign readback_array[2][31:0] = (decoded_reg_strb.INPUT_STATUS && !decoded_req_is_wr) ? hwif_in.INPUT_STATUS.IVALUE.next : '0;
+    logic [31:0] readback_array[56];
+    for(genvar i0=0; i0<8; i0++) begin
+        assign readback_array[i0 * 1 + 0][31:0] = (decoded_reg_strb.output_data[i0] && !decoded_req_is_wr) ? field_storage.output_data[i0].odata.value : '0;
+    end
+    for(genvar i0=0; i0<8; i0++) begin
+        assign readback_array[i0 * 1 + 8][31:0] = (decoded_reg_strb.output_enable[i0] && !decoded_req_is_wr) ? field_storage.output_enable[i0].oenable.value : '0;
+    end
+    for(genvar i0=0; i0<8; i0++) begin
+        assign readback_array[i0 * 1 + 16][31:0] = (decoded_reg_strb.input_data[i0] && !decoded_req_is_wr) ? hwif_in.input_data[i0].idata.next : '0;
+    end
+    for(genvar i0=0; i0<8; i0++) begin
+        assign readback_array[i0 * 1 + 24][31:0] = (decoded_reg_strb.posedge_intr_enable[i0] && !decoded_req_is_wr) ? field_storage.posedge_intr_enable[i0].intr_enable.value : '0;
+    end
+    for(genvar i0=0; i0<8; i0++) begin
+        assign readback_array[i0 * 1 + 32][31:0] = (decoded_reg_strb.negedge_intr_enable[i0] && !decoded_req_is_wr) ? field_storage.negedge_intr_enable[i0].intr_enable.value : '0;
+    end
+    for(genvar i0=0; i0<8; i0++) begin
+        assign readback_array[i0 * 1 + 40][31:0] = (decoded_reg_strb.posedge_intr_status[i0] && !decoded_req_is_wr) ? field_storage.posedge_intr_status[i0].intr_status.value : '0;
+    end
+    for(genvar i0=0; i0<8; i0++) begin
+        assign readback_array[i0 * 1 + 48][31:0] = (decoded_reg_strb.negedge_intr_status[i0] && !decoded_req_is_wr) ? field_storage.negedge_intr_status[i0].intr_status.value : '0;
+    end
 
     // Reduce the array
     always_comb begin
@@ -216,7 +388,7 @@ module gpio_ctrl_csr (
         readback_done = decoded_req & ~decoded_req_is_wr;
         readback_err = '0;
         readback_data_var = '0;
-        for(int i=0; i<3; i++) readback_data_var |= readback_array[i];
+        for(int i=0; i<56; i++) readback_data_var |= readback_array[i];
         readback_data = readback_data_var;
     end
 

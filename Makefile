@@ -22,7 +22,10 @@ RTL_TOP_NAME := gpio_controller
 # Testbench top level module name
 VERIF_TOP_NAME := gpio_controller_verif_tb
 
+# Default testbench name
+TB_NAME := gpio_controller_tb
+
 # Default UVM test name
-TEST := 
+TEST := gpio_controller_test
 
 include ip/flows/digital-ip.mk

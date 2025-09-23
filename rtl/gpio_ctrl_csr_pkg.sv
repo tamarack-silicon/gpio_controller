@@ -4,39 +4,75 @@
 package gpio_ctrl_csr_pkg;
 
     localparam GPIO_CTRL_CSR_DATA_WIDTH = 32;
-    localparam GPIO_CTRL_CSR_MIN_ADDR_WIDTH = 4;
-    localparam GPIO_CTRL_CSR_SIZE = 'hc;
+    localparam GPIO_CTRL_CSR_MIN_ADDR_WIDTH = 11;
+    localparam GPIO_CTRL_CSR_SIZE = 'h620;
 
     typedef struct {
         logic [31:0] next;
-    } gpio_ctrl_csr__INPUT_STATUS__IVALUE__in_t;
+    } gpio_ctrl_csr__input_data_r__idata__in_t;
 
     typedef struct {
-        gpio_ctrl_csr__INPUT_STATUS__IVALUE__in_t IVALUE;
-    } gpio_ctrl_csr__INPUT_STATUS__in_t;
+        gpio_ctrl_csr__input_data_r__idata__in_t idata;
+    } gpio_ctrl_csr__input_data_r__in_t;
 
     typedef struct {
-        gpio_ctrl_csr__INPUT_STATUS__in_t INPUT_STATUS;
+        gpio_ctrl_csr__input_data_r__in_t input_data[8];
     } gpio_ctrl_csr__in_t;
 
     typedef struct {
         logic [31:0] value;
-    } gpio_ctrl_csr__OUTPUT_CTRL_VALUE__OVALUE__out_t;
+    } gpio_ctrl_csr__output_data_r__odata__out_t;
 
     typedef struct {
-        gpio_ctrl_csr__OUTPUT_CTRL_VALUE__OVALUE__out_t OVALUE;
-    } gpio_ctrl_csr__OUTPUT_CTRL_VALUE__out_t;
+        gpio_ctrl_csr__output_data_r__odata__out_t odata;
+    } gpio_ctrl_csr__output_data_r__out_t;
 
     typedef struct {
         logic [31:0] value;
-    } gpio_ctrl_csr__OUTPUT_CTRL_ENABLE__OENABLE__out_t;
+    } gpio_ctrl_csr__output_enable_r__oenable__out_t;
 
     typedef struct {
-        gpio_ctrl_csr__OUTPUT_CTRL_ENABLE__OENABLE__out_t OENABLE;
-    } gpio_ctrl_csr__OUTPUT_CTRL_ENABLE__out_t;
+        gpio_ctrl_csr__output_enable_r__oenable__out_t oenable;
+    } gpio_ctrl_csr__output_enable_r__out_t;
 
     typedef struct {
-        gpio_ctrl_csr__OUTPUT_CTRL_VALUE__out_t OUTPUT_CTRL_VALUE;
-        gpio_ctrl_csr__OUTPUT_CTRL_ENABLE__out_t OUTPUT_CTRL_ENABLE;
+        logic [31:0] value;
+    } gpio_ctrl_csr__posedge_intr_enable_r__intr_enable__out_t;
+
+    typedef struct {
+        gpio_ctrl_csr__posedge_intr_enable_r__intr_enable__out_t intr_enable;
+    } gpio_ctrl_csr__posedge_intr_enable_r__out_t;
+
+    typedef struct {
+        logic [31:0] value;
+    } gpio_ctrl_csr__negedge_intr_enable_r__intr_enable__out_t;
+
+    typedef struct {
+        gpio_ctrl_csr__negedge_intr_enable_r__intr_enable__out_t intr_enable;
+    } gpio_ctrl_csr__negedge_intr_enable_r__out_t;
+
+    typedef struct {
+        logic [31:0] value;
+    } gpio_ctrl_csr__posedge_intr_status_r__intr_status__out_t;
+
+    typedef struct {
+        gpio_ctrl_csr__posedge_intr_status_r__intr_status__out_t intr_status;
+    } gpio_ctrl_csr__posedge_intr_status_r__out_t;
+
+    typedef struct {
+        logic [31:0] value;
+    } gpio_ctrl_csr__negedge_intr_status_r__intr_status__out_t;
+
+    typedef struct {
+        gpio_ctrl_csr__negedge_intr_status_r__intr_status__out_t intr_status;
+    } gpio_ctrl_csr__negedge_intr_status_r__out_t;
+
+    typedef struct {
+        gpio_ctrl_csr__output_data_r__out_t output_data[8];
+        gpio_ctrl_csr__output_enable_r__out_t output_enable[8];
+        gpio_ctrl_csr__posedge_intr_enable_r__out_t posedge_intr_enable[8];
+        gpio_ctrl_csr__negedge_intr_enable_r__out_t negedge_intr_enable[8];
+        gpio_ctrl_csr__posedge_intr_status_r__out_t posedge_intr_status[8];
+        gpio_ctrl_csr__negedge_intr_status_r__out_t negedge_intr_status[8];
     } gpio_ctrl_csr__out_t;
 endpackage

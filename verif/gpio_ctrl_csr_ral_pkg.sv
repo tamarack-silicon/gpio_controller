@@ -4,53 +4,113 @@ package gpio_ctrl_csr_ral_pkg;
     `include "uvm_macros.svh"
     import uvm_pkg::*;
     
-    // Reg - gpio_ctrl_csr::OUTPUT_CTRL_VALUE
-    class gpio_ctrl_csr__OUTPUT_CTRL_VALUE extends uvm_reg;
-        rand uvm_reg_field OVALUE;
+    // Reg - gpio_ctrl_csr::output_data_r
+    class gpio_ctrl_csr__output_data_r extends uvm_reg;
+        rand uvm_reg_field odata;
 
-        function new(string name = "gpio_ctrl_csr__OUTPUT_CTRL_VALUE");
+        function new(string name = "gpio_ctrl_csr__output_data_r");
             super.new(name, 32, UVM_NO_COVERAGE);
         endfunction : new
 
         virtual function void build();
-            this.OVALUE = new("OVALUE");
-            this.OVALUE.configure(this, 32, 0, "RW", 0, 'h0, 1, 1, 0);
+            this.odata = new("odata");
+            this.odata.configure(this, 32, 0, "RW", 0, 'h0, 1, 1, 0);
         endfunction : build
-    endclass : gpio_ctrl_csr__OUTPUT_CTRL_VALUE
+    endclass : gpio_ctrl_csr__output_data_r
 
-    // Reg - gpio_ctrl_csr::OUTPUT_CTRL_ENABLE
-    class gpio_ctrl_csr__OUTPUT_CTRL_ENABLE extends uvm_reg;
-        rand uvm_reg_field OENABLE;
+    // Reg - gpio_ctrl_csr::output_enable_r
+    class gpio_ctrl_csr__output_enable_r extends uvm_reg;
+        rand uvm_reg_field oenable;
 
-        function new(string name = "gpio_ctrl_csr__OUTPUT_CTRL_ENABLE");
+        function new(string name = "gpio_ctrl_csr__output_enable_r");
             super.new(name, 32, UVM_NO_COVERAGE);
         endfunction : new
 
         virtual function void build();
-            this.OENABLE = new("OENABLE");
-            this.OENABLE.configure(this, 32, 0, "RW", 0, 'h0, 1, 1, 0);
+            this.oenable = new("oenable");
+            this.oenable.configure(this, 32, 0, "RW", 0, 'h0, 1, 1, 0);
         endfunction : build
-    endclass : gpio_ctrl_csr__OUTPUT_CTRL_ENABLE
+    endclass : gpio_ctrl_csr__output_enable_r
 
-    // Reg - gpio_ctrl_csr::INPUT_STATUS
-    class gpio_ctrl_csr__INPUT_STATUS extends uvm_reg;
-        rand uvm_reg_field IVALUE;
+    // Reg - gpio_ctrl_csr::input_data_r
+    class gpio_ctrl_csr__input_data_r extends uvm_reg;
+        rand uvm_reg_field idata;
 
-        function new(string name = "gpio_ctrl_csr__INPUT_STATUS");
+        function new(string name = "gpio_ctrl_csr__input_data_r");
             super.new(name, 32, UVM_NO_COVERAGE);
         endfunction : new
 
         virtual function void build();
-            this.IVALUE = new("IVALUE");
-            this.IVALUE.configure(this, 32, 0, "RO", 1, 'h0, 0, 1, 0);
+            this.idata = new("idata");
+            this.idata.configure(this, 32, 0, "RO", 1, 'h0, 0, 1, 0);
         endfunction : build
-    endclass : gpio_ctrl_csr__INPUT_STATUS
+    endclass : gpio_ctrl_csr__input_data_r
+
+    // Reg - gpio_ctrl_csr::posedge_intr_enable_r
+    class gpio_ctrl_csr__posedge_intr_enable_r extends uvm_reg;
+        rand uvm_reg_field intr_enable;
+
+        function new(string name = "gpio_ctrl_csr__posedge_intr_enable_r");
+            super.new(name, 32, UVM_NO_COVERAGE);
+        endfunction : new
+
+        virtual function void build();
+            this.intr_enable = new("intr_enable");
+            this.intr_enable.configure(this, 32, 0, "RW", 0, 'h0, 0, 1, 0);
+        endfunction : build
+    endclass : gpio_ctrl_csr__posedge_intr_enable_r
+
+    // Reg - gpio_ctrl_csr::negedge_intr_enable_r
+    class gpio_ctrl_csr__negedge_intr_enable_r extends uvm_reg;
+        rand uvm_reg_field intr_enable;
+
+        function new(string name = "gpio_ctrl_csr__negedge_intr_enable_r");
+            super.new(name, 32, UVM_NO_COVERAGE);
+        endfunction : new
+
+        virtual function void build();
+            this.intr_enable = new("intr_enable");
+            this.intr_enable.configure(this, 32, 0, "RW", 0, 'h0, 0, 1, 0);
+        endfunction : build
+    endclass : gpio_ctrl_csr__negedge_intr_enable_r
+
+    // Reg - gpio_ctrl_csr::posedge_intr_status_r
+    class gpio_ctrl_csr__posedge_intr_status_r extends uvm_reg;
+        rand uvm_reg_field intr_status;
+
+        function new(string name = "gpio_ctrl_csr__posedge_intr_status_r");
+            super.new(name, 32, UVM_NO_COVERAGE);
+        endfunction : new
+
+        virtual function void build();
+            this.intr_status = new("intr_status");
+            this.intr_status.configure(this, 32, 0, "RW", 0, 'h0, 0, 1, 0);
+        endfunction : build
+    endclass : gpio_ctrl_csr__posedge_intr_status_r
+
+    // Reg - gpio_ctrl_csr::negedge_intr_status_r
+    class gpio_ctrl_csr__negedge_intr_status_r extends uvm_reg;
+        rand uvm_reg_field intr_status;
+
+        function new(string name = "gpio_ctrl_csr__negedge_intr_status_r");
+            super.new(name, 32, UVM_NO_COVERAGE);
+        endfunction : new
+
+        virtual function void build();
+            this.intr_status = new("intr_status");
+            this.intr_status.configure(this, 32, 0, "RW", 0, 'h0, 0, 1, 0);
+        endfunction : build
+    endclass : gpio_ctrl_csr__negedge_intr_status_r
 
     // Addrmap - gpio_ctrl_csr
     class gpio_ctrl_csr extends uvm_reg_block;
-        rand gpio_ctrl_csr__OUTPUT_CTRL_VALUE OUTPUT_CTRL_VALUE;
-        rand gpio_ctrl_csr__OUTPUT_CTRL_ENABLE OUTPUT_CTRL_ENABLE;
-        rand gpio_ctrl_csr__INPUT_STATUS INPUT_STATUS;
+        rand gpio_ctrl_csr__output_data_r output_data[8];
+        rand gpio_ctrl_csr__output_enable_r output_enable[8];
+        rand gpio_ctrl_csr__input_data_r input_data[8];
+        rand gpio_ctrl_csr__posedge_intr_enable_r posedge_intr_enable[8];
+        rand gpio_ctrl_csr__negedge_intr_enable_r negedge_intr_enable[8];
+        rand gpio_ctrl_csr__posedge_intr_status_r posedge_intr_status[8];
+        rand gpio_ctrl_csr__negedge_intr_status_r negedge_intr_status[8];
 
         function new(string name = "gpio_ctrl_csr");
             super.new(name);
@@ -58,21 +118,55 @@ package gpio_ctrl_csr_ral_pkg;
 
         virtual function void build();
             this.default_map = create_map("reg_map", 0, 4, UVM_NO_ENDIAN);
-            this.OUTPUT_CTRL_VALUE = new("OUTPUT_CTRL_VALUE");
-            this.OUTPUT_CTRL_VALUE.configure(this);
-
-            this.OUTPUT_CTRL_VALUE.build();
-            this.default_map.add_reg(this.OUTPUT_CTRL_VALUE, 'h0);
-            this.OUTPUT_CTRL_ENABLE = new("OUTPUT_CTRL_ENABLE");
-            this.OUTPUT_CTRL_ENABLE.configure(this);
-
-            this.OUTPUT_CTRL_ENABLE.build();
-            this.default_map.add_reg(this.OUTPUT_CTRL_ENABLE, 'h4);
-            this.INPUT_STATUS = new("INPUT_STATUS");
-            this.INPUT_STATUS.configure(this);
-
-            this.INPUT_STATUS.build();
-            this.default_map.add_reg(this.INPUT_STATUS, 'h8);
+            foreach(this.output_data[i0]) begin
+                this.output_data[i0] = new($sformatf("output_data[%0d]", i0));
+                this.output_data[i0].configure(this);
+                
+                this.output_data[i0].build();
+                this.default_map.add_reg(this.output_data[i0], 'h0 + i0*'h4);
+            end
+            foreach(this.output_enable[i0]) begin
+                this.output_enable[i0] = new($sformatf("output_enable[%0d]", i0));
+                this.output_enable[i0].configure(this);
+                
+                this.output_enable[i0].build();
+                this.default_map.add_reg(this.output_enable[i0], 'h100 + i0*'h4);
+            end
+            foreach(this.input_data[i0]) begin
+                this.input_data[i0] = new($sformatf("input_data[%0d]", i0));
+                this.input_data[i0].configure(this);
+                
+                this.input_data[i0].build();
+                this.default_map.add_reg(this.input_data[i0], 'h200 + i0*'h4);
+            end
+            foreach(this.posedge_intr_enable[i0]) begin
+                this.posedge_intr_enable[i0] = new($sformatf("posedge_intr_enable[%0d]", i0));
+                this.posedge_intr_enable[i0].configure(this);
+                
+                this.posedge_intr_enable[i0].build();
+                this.default_map.add_reg(this.posedge_intr_enable[i0], 'h300 + i0*'h4);
+            end
+            foreach(this.negedge_intr_enable[i0]) begin
+                this.negedge_intr_enable[i0] = new($sformatf("negedge_intr_enable[%0d]", i0));
+                this.negedge_intr_enable[i0].configure(this);
+                
+                this.negedge_intr_enable[i0].build();
+                this.default_map.add_reg(this.negedge_intr_enable[i0], 'h400 + i0*'h4);
+            end
+            foreach(this.posedge_intr_status[i0]) begin
+                this.posedge_intr_status[i0] = new($sformatf("posedge_intr_status[%0d]", i0));
+                this.posedge_intr_status[i0].configure(this);
+                
+                this.posedge_intr_status[i0].build();
+                this.default_map.add_reg(this.posedge_intr_status[i0], 'h500 + i0*'h4);
+            end
+            foreach(this.negedge_intr_status[i0]) begin
+                this.negedge_intr_status[i0] = new($sformatf("negedge_intr_status[%0d]", i0));
+                this.negedge_intr_status[i0].configure(this);
+                
+                this.negedge_intr_status[i0].build();
+                this.default_map.add_reg(this.negedge_intr_status[i0], 'h600 + i0*'h4);
+            end
         endfunction : build
     endclass : gpio_ctrl_csr
 

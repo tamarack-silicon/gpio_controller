@@ -6,31 +6,71 @@ addrmap gpio_ctrl_csr {
     default sw = rw;
     default hw = r;
 
-    reg {
-        name = "Output Control Register";
+    reg output_data_r {
+        name = "Output Data Register";
 
         field {
-            desc = "Output value";
-        } OVALUE[31:0] = 0;
+            desc = "Output data";
+        } odata[31:0] = 0;
 
-    } OUTPUT_CTRL_VALUE @ 0x0;
+    };
 
-    reg {
+    reg output_enable_r {
         name = "Output Enable Register";
 
         field {
             desc = "Output enable";
-        } OENABLE[31:0] = 0;
+        } oenable[31:0] = 0;
 
-    } OUTPUT_CTRL_ENABLE @ 0x4;
+    };
 
-    reg {
-        name = "Input Status Register";
+    reg input_data_r {
+        name = "Input Data Register";
 
         field {
             desc = "Input value";
             sw=r; hw=w;
-        } IVALUE[31:0];
+        } idata[31:0];
 
-    } INPUT_STATUS @ 0x8;
+    };
+
+	reg posedge_intr_enable_r {
+		name = "Positive Edge Interrupt Enable Register";
+
+		field {
+			  desc = "Positive Edge Interrupt Enable";
+		} intr_enable[31:0];
+	};
+
+	reg negedge_intr_enable_r {
+		name = "Negative Edge Interrupt Enable Register";
+
+		field {
+			  desc = "Negative Edge Interrupt Enable";
+		} intr_enable[31:0];
+	};
+
+	reg posedge_intr_status_r {
+		name = "Positive Edge Interrupt Status Register";
+
+		field {
+			  desc = "Positive Edge Interrupt Status";
+		} intr_status[31:0];
+	};
+
+	reg negedge_intr_status_r {
+		name = "Negative Edge Interrupt Status Register";
+
+		field {
+			  desc = "Negative Edge Interrupt Status";
+		} intr_status[31:0];
+	};
+
+	output_data_r output_data[8] @ 0x0 += 0x4;
+	output_enable_r output_enable[8] @ 0x100 += 0x4;
+	input_data_r input_data[8] @ 0x200 += 0x4;
+	posedge_intr_enable_r posedge_intr_enable[8] @ 0x300 += 0x4;
+	negedge_intr_enable_r negedge_intr_enable[8] @ 0x400 += 0x4;
+	posedge_intr_status_r posedge_intr_status[8] @ 0x500 += 0x4;
+	negedge_intr_status_r negedge_intr_status[8] @ 0x600 += 0x4;
 };

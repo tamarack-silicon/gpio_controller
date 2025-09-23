@@ -13,8 +13,9 @@ module gpio_controller (
     output logic        pready,
     output logic        pslverr,
     // GPIO interface
-    input logic [31:0]  gpio_in,
-    output logic [31:0] gpio_out
+    input logic [31:0]  gpio_in_data,
+    output logic [31:0] gpio_out_data,
+	output logic [31:0] gpio_out_enable
 );
 
     gpio_ctrl_csr_pkg::gpio_ctrl_csr__in_t csr_in;
@@ -43,12 +44,13 @@ module gpio_controller (
         if(rst_n == 1'b0) begin
             sync_flops <= 'h0;
         end else begin
-            sync_flops[0] <= gpio_in;
+            sync_flops[0] <= gpio_in_data;
             sync_flops[1] <= sync_flops[0];
         end
     end
 
-    assign gpio_out = csr_out.OUTPUT_CTRL_VALUE.OVALUE.value;
-    assign csr_in.INPUT_STATUS.IVALUE.next = sync_flops[1];
+    assign gpio_out_data = csr_out.output_data[0].odata.value;
+	assign gpio_out_enable = csr_out.output_enable[0].oenable.value;
+    assign csr_in.input_data[0].idata.next = sync_flops[1];
 
 endmodule // gpio_controller
