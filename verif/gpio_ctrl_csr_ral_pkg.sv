@@ -84,7 +84,7 @@ package gpio_ctrl_csr_ral_pkg;
 
         virtual function void build();
             this.intr_status = new("intr_status");
-            this.intr_status.configure(this, 32, 0, "RW", 0, 'h0, 0, 1, 0);
+            this.intr_status.configure(this, 32, 0, "W1C", 1, 'h0, 0, 1, 0);
         endfunction : build
     endclass : gpio_ctrl_csr__posedge_intr_status_r
 
@@ -98,7 +98,7 @@ package gpio_ctrl_csr_ral_pkg;
 
         virtual function void build();
             this.intr_status = new("intr_status");
-            this.intr_status.configure(this, 32, 0, "RW", 0, 'h0, 0, 1, 0);
+            this.intr_status.configure(this, 32, 0, "W1C", 1, 'h0, 0, 1, 0);
         endfunction : build
     endclass : gpio_ctrl_csr__negedge_intr_status_r
 

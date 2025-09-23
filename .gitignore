@@ -1,3 +1,4 @@
 sim
+netlist
 rtl_filelist.f
 verif_filelist.f

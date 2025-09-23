@@ -29,7 +29,8 @@ addrmap gpio_ctrl_csr {
 
         field {
             desc = "Input value";
-            sw=r; hw=w;
+            sw = r;
+			hw = w;
         } idata[31:0];
 
     };
@@ -38,7 +39,7 @@ addrmap gpio_ctrl_csr {
 		name = "Positive Edge Interrupt Enable Register";
 
 		field {
-			  desc = "Positive Edge Interrupt Enable";
+			desc = "Positive Edge Interrupt Enable";
 		} intr_enable[31:0];
 	};
 
@@ -46,7 +47,7 @@ addrmap gpio_ctrl_csr {
 		name = "Negative Edge Interrupt Enable Register";
 
 		field {
-			  desc = "Negative Edge Interrupt Enable";
+			desc = "Negative Edge Interrupt Enable";
 		} intr_enable[31:0];
 	};
 
@@ -54,7 +55,11 @@ addrmap gpio_ctrl_csr {
 		name = "Positive Edge Interrupt Status Register";
 
 		field {
-			  desc = "Positive Edge Interrupt Status";
+			desc = "Positive Edge Interrupt Status";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
 		} intr_status[31:0];
 	};
 
@@ -62,7 +67,11 @@ addrmap gpio_ctrl_csr {
 		name = "Negative Edge Interrupt Status Register";
 
 		field {
-			  desc = "Negative Edge Interrupt Status";
+			desc = "Negative Edge Interrupt Status";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
 		} intr_status[31:0];
 	};
 

@@ -16,7 +16,25 @@ package gpio_ctrl_csr_pkg;
     } gpio_ctrl_csr__input_data_r__in_t;
 
     typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__posedge_intr_status_r__intr_status__in_t;
+
+    typedef struct {
+        gpio_ctrl_csr__posedge_intr_status_r__intr_status__in_t intr_status;
+    } gpio_ctrl_csr__posedge_intr_status_r__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__negedge_intr_status_r__intr_status__in_t;
+
+    typedef struct {
+        gpio_ctrl_csr__negedge_intr_status_r__intr_status__in_t intr_status;
+    } gpio_ctrl_csr__negedge_intr_status_r__in_t;
+
+    typedef struct {
         gpio_ctrl_csr__input_data_r__in_t input_data[8];
+        gpio_ctrl_csr__posedge_intr_status_r__in_t posedge_intr_status[8];
+        gpio_ctrl_csr__negedge_intr_status_r__in_t negedge_intr_status[8];
     } gpio_ctrl_csr__in_t;
 
     typedef struct {

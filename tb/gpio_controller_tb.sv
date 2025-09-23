@@ -36,7 +36,7 @@ module gpio_controller_tb;
     initial begin
         rst_n = 1'b0;
 
-        paddr = 16'h0;
+        paddr = 12'h0;
         pwrite = 1'b0;
         psel = 1'b0;
         penable = 1'b0;
@@ -50,7 +50,7 @@ module gpio_controller_tb;
         #200;
 
         @apb_clk;
-        apb_clk.paddr <= 16'h0;
+        apb_clk.paddr <= 12'h0;
         apb_clk.pwrite <= 1'b1;
         apb_clk.psel <= 1'b1;
         apb_clk.pwdata <= 32'h12345678;
@@ -64,7 +64,7 @@ module gpio_controller_tb;
         #100;
 
         @apb_clk;
-        apb_clk.paddr <= 16'h204;
+        apb_clk.paddr <= 12'h204;
         apb_clk.pwrite <= 1'b0;
         apb_clk.psel <= 1'b1;
         @apb_clk;
