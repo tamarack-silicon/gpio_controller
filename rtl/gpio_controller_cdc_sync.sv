@@ -10,8 +10,8 @@ module gpio_controller_cdc_sync #(
 
 	always_ff @(posedge clk or negedge rst_n) begin
 		if(~rst_n) begin
-			stage <= 1'b0;
-			out <= 1'b0;
+			stage <= '0;
+			out <= '0;
 		end else begin
 			stage <= in;
 			out <= stage;
