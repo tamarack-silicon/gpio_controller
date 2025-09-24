@@ -51,6 +51,8 @@ module gpio_controller_tb;
         rst_n = 1'b1;
         #200;
 
+		// Test GPIO output
+
         @apb_clk;
         apb_clk.paddr <= 12'h0;
         apb_clk.pwrite <= 1'b1;
@@ -65,10 +67,71 @@ module gpio_controller_tb;
 
         #100;
 
+		// Test GPIO input
+
         @apb_clk;
         apb_clk.paddr <= 12'h204;
         apb_clk.pwrite <= 1'b0;
         apb_clk.psel <= 1'b1;
+        @apb_clk;
+        apb_clk.penable <= 1'b1;
+        @apb_clk;
+        apb_clk.psel <= 1'b0;
+        apb_clk.penable <= 1'b0;
+        @apb_clk;
+
+		#100;
+
+		// Since all interrupts are default disabled, no interrupt shall be triggered on input change
+
+		gpio_in_data = gpio_out_enable | 256'h1_00000000_00000000;
+
+		#100;
+
+		// Enable Rising edge interrupt on 3rd GPIO bank
+
+        @apb_clk;
+        apb_clk.paddr <= 12'h308;
+        apb_clk.pwrite <= 1'b1;
+        apb_clk.psel <= 1'b1;
+        apb_clk.pwdata <= 32'hffffffff;
+        @apb_clk;
+        apb_clk.penable <= 1'b1;
+        @apb_clk;
+        apb_clk.psel <= 1'b0;
+        apb_clk.penable <= 1'b0;
+        @apb_clk;
+
+		#100;
+
+		// Rising edge on a pin
+
+		gpio_in_data = gpio_out_enable | 256'h3_00000000_00000000;
+
+		#100;
+
+		// Read interrupt status register
+
+        @apb_clk;
+        apb_clk.paddr <= 12'h500;
+        apb_clk.pwrite <= 1'b0;
+        apb_clk.psel <= 1'b1;
+        @apb_clk;
+        apb_clk.penable <= 1'b1;
+        @apb_clk;
+        apb_clk.psel <= 1'b0;
+        apb_clk.penable <= 1'b0;
+        @apb_clk;
+
+		#100;
+
+		// Clear interrupt
+
+        @apb_clk;
+        apb_clk.paddr <= 12'h500;
+        apb_clk.pwrite <= 1'b1;
+        apb_clk.psel <= 1'b1;
+        apb_clk.pwdata <= 32'h00000004;
         @apb_clk;
         apb_clk.penable <= 1'b1;
         @apb_clk;
