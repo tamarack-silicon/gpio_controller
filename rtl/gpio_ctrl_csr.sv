@@ -92,8 +92,7 @@ module gpio_ctrl_csr (
         logic input_data[8];
         logic posedge_intr_enable[8];
         logic negedge_intr_enable[8];
-        logic posedge_intr_status[8];
-        logic negedge_intr_status[8];
+        logic intr_status;
     } decoded_reg_strb_t;
     decoded_reg_strb_t decoded_reg_strb;
     logic decoded_req;
@@ -117,12 +116,7 @@ module gpio_ctrl_csr (
         for(int i0=0; i0<8; i0++) begin
             decoded_reg_strb.negedge_intr_enable[i0] = cpuif_req_masked & (cpuif_addr == 11'h400 + (11)'(i0) * 11'h4);
         end
-        for(int i0=0; i0<8; i0++) begin
-            decoded_reg_strb.posedge_intr_status[i0] = cpuif_req_masked & (cpuif_addr == 11'h500 + (11)'(i0) * 11'h4);
-        end
-        for(int i0=0; i0<8; i0++) begin
-            decoded_reg_strb.negedge_intr_status[i0] = cpuif_req_masked & (cpuif_addr == 11'h600 + (11)'(i0) * 11'h4);
-        end
+        decoded_reg_strb.intr_status = cpuif_req_masked & (cpuif_addr == 11'h500);
     end
 
     // Pass down signals to next stage
@@ -161,16 +155,70 @@ module gpio_ctrl_csr (
         } negedge_intr_enable[8];
         struct {
             struct {
-                logic [31:0] next;
+                logic next;
                 logic load_next;
-            } intr_status;
-        } posedge_intr_status[8];
-        struct {
+            } posedge_0;
             struct {
-                logic [31:0] next;
+                logic next;
                 logic load_next;
-            } intr_status;
-        } negedge_intr_status[8];
+            } posedge_1;
+            struct {
+                logic next;
+                logic load_next;
+            } posedge_2;
+            struct {
+                logic next;
+                logic load_next;
+            } posedge_3;
+            struct {
+                logic next;
+                logic load_next;
+            } posedge_4;
+            struct {
+                logic next;
+                logic load_next;
+            } posedge_5;
+            struct {
+                logic next;
+                logic load_next;
+            } posedge_6;
+            struct {
+                logic next;
+                logic load_next;
+            } posedge_7;
+            struct {
+                logic next;
+                logic load_next;
+            } negedge_0;
+            struct {
+                logic next;
+                logic load_next;
+            } negedge_1;
+            struct {
+                logic next;
+                logic load_next;
+            } negedge_2;
+            struct {
+                logic next;
+                logic load_next;
+            } negedge_3;
+            struct {
+                logic next;
+                logic load_next;
+            } negedge_4;
+            struct {
+                logic next;
+                logic load_next;
+            } negedge_5;
+            struct {
+                logic next;
+                logic load_next;
+            } negedge_6;
+            struct {
+                logic next;
+                logic load_next;
+            } negedge_7;
+        } intr_status;
     } field_combo_t;
     field_combo_t field_combo;
 
@@ -197,14 +245,54 @@ module gpio_ctrl_csr (
         } negedge_intr_enable[8];
         struct {
             struct {
-                logic [31:0] value;
-            } intr_status;
-        } posedge_intr_status[8];
-        struct {
+                logic value;
+            } posedge_0;
             struct {
-                logic [31:0] value;
-            } intr_status;
-        } negedge_intr_status[8];
+                logic value;
+            } posedge_1;
+            struct {
+                logic value;
+            } posedge_2;
+            struct {
+                logic value;
+            } posedge_3;
+            struct {
+                logic value;
+            } posedge_4;
+            struct {
+                logic value;
+            } posedge_5;
+            struct {
+                logic value;
+            } posedge_6;
+            struct {
+                logic value;
+            } posedge_7;
+            struct {
+                logic value;
+            } negedge_0;
+            struct {
+                logic value;
+            } negedge_1;
+            struct {
+                logic value;
+            } negedge_2;
+            struct {
+                logic value;
+            } negedge_3;
+            struct {
+                logic value;
+            } negedge_4;
+            struct {
+                logic value;
+            } negedge_5;
+            struct {
+                logic value;
+            } negedge_6;
+            struct {
+                logic value;
+            } negedge_7;
+        } intr_status;
     } field_storage_t;
     field_storage_t field_storage;
 
@@ -300,54 +388,358 @@ module gpio_ctrl_csr (
         end
         assign hwif_out.negedge_intr_enable[i0].intr_enable.value = field_storage.negedge_intr_enable[i0].intr_enable.value;
     end
-    for(genvar i0=0; i0<8; i0++) begin
-        // Field: gpio_ctrl_csr.posedge_intr_status[].intr_status
-        always_comb begin
-            automatic logic [31:0] next_c;
-            automatic logic load_next_c;
-            next_c = field_storage.posedge_intr_status[i0].intr_status.value;
-            load_next_c = '0;
-            if(decoded_reg_strb.posedge_intr_status[i0] && decoded_req_is_wr) begin // SW write 1 clear
-                next_c = field_storage.posedge_intr_status[i0].intr_status.value & ~(decoded_wr_data[31:0] & decoded_wr_biten[31:0]);
-                load_next_c = '1;
-            end else if(hwif_in.posedge_intr_status[i0].intr_status.hwset) begin // HW Set
-                next_c = '1;
-                load_next_c = '1;
-            end
-            field_combo.posedge_intr_status[i0].intr_status.next = next_c;
-            field_combo.posedge_intr_status[i0].intr_status.load_next = load_next_c;
+    // Field: gpio_ctrl_csr.intr_status.posedge_0
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.posedge_0.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.posedge_0.value & ~(decoded_wr_data[0:0] & decoded_wr_biten[0:0]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.posedge_0.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
         end
-        always_ff @(posedge clk) begin
-            if(field_combo.posedge_intr_status[i0].intr_status.load_next) begin
-                field_storage.posedge_intr_status[i0].intr_status.value <= field_combo.posedge_intr_status[i0].intr_status.next;
-            end
-        end
-        assign hwif_out.posedge_intr_status[i0].intr_status.value = field_storage.posedge_intr_status[i0].intr_status.value;
+        field_combo.intr_status.posedge_0.next = next_c;
+        field_combo.intr_status.posedge_0.load_next = load_next_c;
     end
-    for(genvar i0=0; i0<8; i0++) begin
-        // Field: gpio_ctrl_csr.negedge_intr_status[].intr_status
-        always_comb begin
-            automatic logic [31:0] next_c;
-            automatic logic load_next_c;
-            next_c = field_storage.negedge_intr_status[i0].intr_status.value;
-            load_next_c = '0;
-            if(decoded_reg_strb.negedge_intr_status[i0] && decoded_req_is_wr) begin // SW write 1 clear
-                next_c = field_storage.negedge_intr_status[i0].intr_status.value & ~(decoded_wr_data[31:0] & decoded_wr_biten[31:0]);
-                load_next_c = '1;
-            end else if(hwif_in.negedge_intr_status[i0].intr_status.hwset) begin // HW Set
-                next_c = '1;
-                load_next_c = '1;
-            end
-            field_combo.negedge_intr_status[i0].intr_status.next = next_c;
-            field_combo.negedge_intr_status[i0].intr_status.load_next = load_next_c;
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.posedge_0.load_next) begin
+            field_storage.intr_status.posedge_0.value <= field_combo.intr_status.posedge_0.next;
         end
-        always_ff @(posedge clk) begin
-            if(field_combo.negedge_intr_status[i0].intr_status.load_next) begin
-                field_storage.negedge_intr_status[i0].intr_status.value <= field_combo.negedge_intr_status[i0].intr_status.next;
-            end
-        end
-        assign hwif_out.negedge_intr_status[i0].intr_status.value = field_storage.negedge_intr_status[i0].intr_status.value;
     end
+    assign hwif_out.intr_status.posedge_0.value = field_storage.intr_status.posedge_0.value;
+    // Field: gpio_ctrl_csr.intr_status.posedge_1
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.posedge_1.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.posedge_1.value & ~(decoded_wr_data[1:1] & decoded_wr_biten[1:1]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.posedge_1.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.posedge_1.next = next_c;
+        field_combo.intr_status.posedge_1.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.posedge_1.load_next) begin
+            field_storage.intr_status.posedge_1.value <= field_combo.intr_status.posedge_1.next;
+        end
+    end
+    assign hwif_out.intr_status.posedge_1.value = field_storage.intr_status.posedge_1.value;
+    // Field: gpio_ctrl_csr.intr_status.posedge_2
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.posedge_2.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.posedge_2.value & ~(decoded_wr_data[2:2] & decoded_wr_biten[2:2]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.posedge_2.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.posedge_2.next = next_c;
+        field_combo.intr_status.posedge_2.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.posedge_2.load_next) begin
+            field_storage.intr_status.posedge_2.value <= field_combo.intr_status.posedge_2.next;
+        end
+    end
+    assign hwif_out.intr_status.posedge_2.value = field_storage.intr_status.posedge_2.value;
+    // Field: gpio_ctrl_csr.intr_status.posedge_3
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.posedge_3.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.posedge_3.value & ~(decoded_wr_data[3:3] & decoded_wr_biten[3:3]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.posedge_3.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.posedge_3.next = next_c;
+        field_combo.intr_status.posedge_3.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.posedge_3.load_next) begin
+            field_storage.intr_status.posedge_3.value <= field_combo.intr_status.posedge_3.next;
+        end
+    end
+    assign hwif_out.intr_status.posedge_3.value = field_storage.intr_status.posedge_3.value;
+    // Field: gpio_ctrl_csr.intr_status.posedge_4
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.posedge_4.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.posedge_4.value & ~(decoded_wr_data[4:4] & decoded_wr_biten[4:4]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.posedge_4.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.posedge_4.next = next_c;
+        field_combo.intr_status.posedge_4.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.posedge_4.load_next) begin
+            field_storage.intr_status.posedge_4.value <= field_combo.intr_status.posedge_4.next;
+        end
+    end
+    assign hwif_out.intr_status.posedge_4.value = field_storage.intr_status.posedge_4.value;
+    // Field: gpio_ctrl_csr.intr_status.posedge_5
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.posedge_5.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.posedge_5.value & ~(decoded_wr_data[5:5] & decoded_wr_biten[5:5]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.posedge_5.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.posedge_5.next = next_c;
+        field_combo.intr_status.posedge_5.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.posedge_5.load_next) begin
+            field_storage.intr_status.posedge_5.value <= field_combo.intr_status.posedge_5.next;
+        end
+    end
+    assign hwif_out.intr_status.posedge_5.value = field_storage.intr_status.posedge_5.value;
+    // Field: gpio_ctrl_csr.intr_status.posedge_6
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.posedge_6.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.posedge_6.value & ~(decoded_wr_data[6:6] & decoded_wr_biten[6:6]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.posedge_6.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.posedge_6.next = next_c;
+        field_combo.intr_status.posedge_6.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.posedge_6.load_next) begin
+            field_storage.intr_status.posedge_6.value <= field_combo.intr_status.posedge_6.next;
+        end
+    end
+    assign hwif_out.intr_status.posedge_6.value = field_storage.intr_status.posedge_6.value;
+    // Field: gpio_ctrl_csr.intr_status.posedge_7
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.posedge_7.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.posedge_7.value & ~(decoded_wr_data[7:7] & decoded_wr_biten[7:7]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.posedge_7.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.posedge_7.next = next_c;
+        field_combo.intr_status.posedge_7.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.posedge_7.load_next) begin
+            field_storage.intr_status.posedge_7.value <= field_combo.intr_status.posedge_7.next;
+        end
+    end
+    assign hwif_out.intr_status.posedge_7.value = field_storage.intr_status.posedge_7.value;
+    // Field: gpio_ctrl_csr.intr_status.negedge_0
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.negedge_0.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.negedge_0.value & ~(decoded_wr_data[8:8] & decoded_wr_biten[8:8]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.negedge_0.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.negedge_0.next = next_c;
+        field_combo.intr_status.negedge_0.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.negedge_0.load_next) begin
+            field_storage.intr_status.negedge_0.value <= field_combo.intr_status.negedge_0.next;
+        end
+    end
+    assign hwif_out.intr_status.negedge_0.value = field_storage.intr_status.negedge_0.value;
+    // Field: gpio_ctrl_csr.intr_status.negedge_1
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.negedge_1.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.negedge_1.value & ~(decoded_wr_data[9:9] & decoded_wr_biten[9:9]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.negedge_1.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.negedge_1.next = next_c;
+        field_combo.intr_status.negedge_1.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.negedge_1.load_next) begin
+            field_storage.intr_status.negedge_1.value <= field_combo.intr_status.negedge_1.next;
+        end
+    end
+    assign hwif_out.intr_status.negedge_1.value = field_storage.intr_status.negedge_1.value;
+    // Field: gpio_ctrl_csr.intr_status.negedge_2
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.negedge_2.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.negedge_2.value & ~(decoded_wr_data[10:10] & decoded_wr_biten[10:10]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.negedge_2.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.negedge_2.next = next_c;
+        field_combo.intr_status.negedge_2.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.negedge_2.load_next) begin
+            field_storage.intr_status.negedge_2.value <= field_combo.intr_status.negedge_2.next;
+        end
+    end
+    assign hwif_out.intr_status.negedge_2.value = field_storage.intr_status.negedge_2.value;
+    // Field: gpio_ctrl_csr.intr_status.negedge_3
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.negedge_3.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.negedge_3.value & ~(decoded_wr_data[11:11] & decoded_wr_biten[11:11]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.negedge_3.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.negedge_3.next = next_c;
+        field_combo.intr_status.negedge_3.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.negedge_3.load_next) begin
+            field_storage.intr_status.negedge_3.value <= field_combo.intr_status.negedge_3.next;
+        end
+    end
+    assign hwif_out.intr_status.negedge_3.value = field_storage.intr_status.negedge_3.value;
+    // Field: gpio_ctrl_csr.intr_status.negedge_4
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.negedge_4.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.negedge_4.value & ~(decoded_wr_data[12:12] & decoded_wr_biten[12:12]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.negedge_4.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.negedge_4.next = next_c;
+        field_combo.intr_status.negedge_4.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.negedge_4.load_next) begin
+            field_storage.intr_status.negedge_4.value <= field_combo.intr_status.negedge_4.next;
+        end
+    end
+    assign hwif_out.intr_status.negedge_4.value = field_storage.intr_status.negedge_4.value;
+    // Field: gpio_ctrl_csr.intr_status.negedge_5
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.negedge_5.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.negedge_5.value & ~(decoded_wr_data[13:13] & decoded_wr_biten[13:13]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.negedge_5.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.negedge_5.next = next_c;
+        field_combo.intr_status.negedge_5.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.negedge_5.load_next) begin
+            field_storage.intr_status.negedge_5.value <= field_combo.intr_status.negedge_5.next;
+        end
+    end
+    assign hwif_out.intr_status.negedge_5.value = field_storage.intr_status.negedge_5.value;
+    // Field: gpio_ctrl_csr.intr_status.negedge_6
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.negedge_6.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.negedge_6.value & ~(decoded_wr_data[14:14] & decoded_wr_biten[14:14]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.negedge_6.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.negedge_6.next = next_c;
+        field_combo.intr_status.negedge_6.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.negedge_6.load_next) begin
+            field_storage.intr_status.negedge_6.value <= field_combo.intr_status.negedge_6.next;
+        end
+    end
+    assign hwif_out.intr_status.negedge_6.value = field_storage.intr_status.negedge_6.value;
+    // Field: gpio_ctrl_csr.intr_status.negedge_7
+    always_comb begin
+        automatic logic [0:0] next_c;
+        automatic logic load_next_c;
+        next_c = field_storage.intr_status.negedge_7.value;
+        load_next_c = '0;
+        if(decoded_reg_strb.intr_status && decoded_req_is_wr) begin // SW write 1 clear
+            next_c = field_storage.intr_status.negedge_7.value & ~(decoded_wr_data[15:15] & decoded_wr_biten[15:15]);
+            load_next_c = '1;
+        end else if(hwif_in.intr_status.negedge_7.hwset) begin // HW Set
+            next_c = '1;
+            load_next_c = '1;
+        end
+        field_combo.intr_status.negedge_7.next = next_c;
+        field_combo.intr_status.negedge_7.load_next = load_next_c;
+    end
+    always_ff @(posedge clk) begin
+        if(field_combo.intr_status.negedge_7.load_next) begin
+            field_storage.intr_status.negedge_7.value <= field_combo.intr_status.negedge_7.next;
+        end
+    end
+    assign hwif_out.intr_status.negedge_7.value = field_storage.intr_status.negedge_7.value;
 
     //--------------------------------------------------------------------------
     // Write response
@@ -365,7 +757,7 @@ module gpio_ctrl_csr (
     logic [31:0] readback_data;
 
     // Assign readback values to a flattened array
-    logic [31:0] readback_array[56];
+    logic [31:0] readback_array[41];
     for(genvar i0=0; i0<8; i0++) begin
         assign readback_array[i0 * 1 + 0][31:0] = (decoded_reg_strb.output_data[i0] && !decoded_req_is_wr) ? field_storage.output_data[i0].odata.value : '0;
     end
@@ -381,12 +773,23 @@ module gpio_ctrl_csr (
     for(genvar i0=0; i0<8; i0++) begin
         assign readback_array[i0 * 1 + 32][31:0] = (decoded_reg_strb.negedge_intr_enable[i0] && !decoded_req_is_wr) ? field_storage.negedge_intr_enable[i0].intr_enable.value : '0;
     end
-    for(genvar i0=0; i0<8; i0++) begin
-        assign readback_array[i0 * 1 + 40][31:0] = (decoded_reg_strb.posedge_intr_status[i0] && !decoded_req_is_wr) ? field_storage.posedge_intr_status[i0].intr_status.value : '0;
-    end
-    for(genvar i0=0; i0<8; i0++) begin
-        assign readback_array[i0 * 1 + 48][31:0] = (decoded_reg_strb.negedge_intr_status[i0] && !decoded_req_is_wr) ? field_storage.negedge_intr_status[i0].intr_status.value : '0;
-    end
+    assign readback_array[40][0:0] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.posedge_0.value : '0;
+    assign readback_array[40][1:1] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.posedge_1.value : '0;
+    assign readback_array[40][2:2] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.posedge_2.value : '0;
+    assign readback_array[40][3:3] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.posedge_3.value : '0;
+    assign readback_array[40][4:4] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.posedge_4.value : '0;
+    assign readback_array[40][5:5] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.posedge_5.value : '0;
+    assign readback_array[40][6:6] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.posedge_6.value : '0;
+    assign readback_array[40][7:7] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.posedge_7.value : '0;
+    assign readback_array[40][8:8] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.negedge_0.value : '0;
+    assign readback_array[40][9:9] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.negedge_1.value : '0;
+    assign readback_array[40][10:10] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.negedge_2.value : '0;
+    assign readback_array[40][11:11] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.negedge_3.value : '0;
+    assign readback_array[40][12:12] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.negedge_4.value : '0;
+    assign readback_array[40][13:13] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.negedge_5.value : '0;
+    assign readback_array[40][14:14] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.negedge_6.value : '0;
+    assign readback_array[40][15:15] = (decoded_reg_strb.intr_status && !decoded_req_is_wr) ? field_storage.intr_status.negedge_7.value : '0;
+    assign readback_array[40][31:16] = '0;
 
     // Reduce the array
     always_comb begin
@@ -394,7 +797,7 @@ module gpio_ctrl_csr (
         readback_done = decoded_req & ~decoded_req_is_wr;
         readback_err = '0;
         readback_data_var = '0;
-        for(int i=0; i<56; i++) readback_data_var |= readback_array[i];
+        for(int i=0; i<41; i++) readback_data_var |= readback_array[i];
         readback_data = readback_data_var;
     end
 

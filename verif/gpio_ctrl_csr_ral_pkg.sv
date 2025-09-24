@@ -74,33 +74,64 @@ package gpio_ctrl_csr_ral_pkg;
         endfunction : build
     endclass : gpio_ctrl_csr__negedge_intr_enable_r
 
-    // Reg - gpio_ctrl_csr::posedge_intr_status_r
-    class gpio_ctrl_csr__posedge_intr_status_r extends uvm_reg;
-        rand uvm_reg_field intr_status;
+    // Reg - gpio_ctrl_csr::intr_status_r
+    class gpio_ctrl_csr__intr_status_r extends uvm_reg;
+        rand uvm_reg_field posedge_0;
+        rand uvm_reg_field posedge_1;
+        rand uvm_reg_field posedge_2;
+        rand uvm_reg_field posedge_3;
+        rand uvm_reg_field posedge_4;
+        rand uvm_reg_field posedge_5;
+        rand uvm_reg_field posedge_6;
+        rand uvm_reg_field posedge_7;
+        rand uvm_reg_field negedge_0;
+        rand uvm_reg_field negedge_1;
+        rand uvm_reg_field negedge_2;
+        rand uvm_reg_field negedge_3;
+        rand uvm_reg_field negedge_4;
+        rand uvm_reg_field negedge_5;
+        rand uvm_reg_field negedge_6;
+        rand uvm_reg_field negedge_7;
 
-        function new(string name = "gpio_ctrl_csr__posedge_intr_status_r");
+        function new(string name = "gpio_ctrl_csr__intr_status_r");
             super.new(name, 32, UVM_NO_COVERAGE);
         endfunction : new
 
         virtual function void build();
-            this.intr_status = new("intr_status");
-            this.intr_status.configure(this, 32, 0, "W1C", 1, 'h0, 0, 1, 0);
+            this.posedge_0 = new("posedge_0");
+            this.posedge_0.configure(this, 1, 0, "W1C", 1, 'h0, 0, 1, 0);
+            this.posedge_1 = new("posedge_1");
+            this.posedge_1.configure(this, 1, 1, "W1C", 1, 'h0, 0, 1, 0);
+            this.posedge_2 = new("posedge_2");
+            this.posedge_2.configure(this, 1, 2, "W1C", 1, 'h0, 0, 1, 0);
+            this.posedge_3 = new("posedge_3");
+            this.posedge_3.configure(this, 1, 3, "W1C", 1, 'h0, 0, 1, 0);
+            this.posedge_4 = new("posedge_4");
+            this.posedge_4.configure(this, 1, 4, "W1C", 1, 'h0, 0, 1, 0);
+            this.posedge_5 = new("posedge_5");
+            this.posedge_5.configure(this, 1, 5, "W1C", 1, 'h0, 0, 1, 0);
+            this.posedge_6 = new("posedge_6");
+            this.posedge_6.configure(this, 1, 6, "W1C", 1, 'h0, 0, 1, 0);
+            this.posedge_7 = new("posedge_7");
+            this.posedge_7.configure(this, 1, 7, "W1C", 1, 'h0, 0, 1, 0);
+            this.negedge_0 = new("negedge_0");
+            this.negedge_0.configure(this, 1, 8, "W1C", 1, 'h0, 0, 1, 0);
+            this.negedge_1 = new("negedge_1");
+            this.negedge_1.configure(this, 1, 9, "W1C", 1, 'h0, 0, 1, 0);
+            this.negedge_2 = new("negedge_2");
+            this.negedge_2.configure(this, 1, 10, "W1C", 1, 'h0, 0, 1, 0);
+            this.negedge_3 = new("negedge_3");
+            this.negedge_3.configure(this, 1, 11, "W1C", 1, 'h0, 0, 1, 0);
+            this.negedge_4 = new("negedge_4");
+            this.negedge_4.configure(this, 1, 12, "W1C", 1, 'h0, 0, 1, 0);
+            this.negedge_5 = new("negedge_5");
+            this.negedge_5.configure(this, 1, 13, "W1C", 1, 'h0, 0, 1, 0);
+            this.negedge_6 = new("negedge_6");
+            this.negedge_6.configure(this, 1, 14, "W1C", 1, 'h0, 0, 1, 0);
+            this.negedge_7 = new("negedge_7");
+            this.negedge_7.configure(this, 1, 15, "W1C", 1, 'h0, 0, 1, 0);
         endfunction : build
-    endclass : gpio_ctrl_csr__posedge_intr_status_r
-
-    // Reg - gpio_ctrl_csr::negedge_intr_status_r
-    class gpio_ctrl_csr__negedge_intr_status_r extends uvm_reg;
-        rand uvm_reg_field intr_status;
-
-        function new(string name = "gpio_ctrl_csr__negedge_intr_status_r");
-            super.new(name, 32, UVM_NO_COVERAGE);
-        endfunction : new
-
-        virtual function void build();
-            this.intr_status = new("intr_status");
-            this.intr_status.configure(this, 32, 0, "W1C", 1, 'h0, 0, 1, 0);
-        endfunction : build
-    endclass : gpio_ctrl_csr__negedge_intr_status_r
+    endclass : gpio_ctrl_csr__intr_status_r
 
     // Addrmap - gpio_ctrl_csr
     class gpio_ctrl_csr extends uvm_reg_block;
@@ -109,8 +140,7 @@ package gpio_ctrl_csr_ral_pkg;
         rand gpio_ctrl_csr__input_data_r input_data[8];
         rand gpio_ctrl_csr__posedge_intr_enable_r posedge_intr_enable[8];
         rand gpio_ctrl_csr__negedge_intr_enable_r negedge_intr_enable[8];
-        rand gpio_ctrl_csr__posedge_intr_status_r posedge_intr_status[8];
-        rand gpio_ctrl_csr__negedge_intr_status_r negedge_intr_status[8];
+        rand gpio_ctrl_csr__intr_status_r intr_status;
 
         function new(string name = "gpio_ctrl_csr");
             super.new(name);
@@ -153,20 +183,11 @@ package gpio_ctrl_csr_ral_pkg;
                 this.negedge_intr_enable[i0].build();
                 this.default_map.add_reg(this.negedge_intr_enable[i0], 'h400 + i0*'h4);
             end
-            foreach(this.posedge_intr_status[i0]) begin
-                this.posedge_intr_status[i0] = new($sformatf("posedge_intr_status[%0d]", i0));
-                this.posedge_intr_status[i0].configure(this);
-                
-                this.posedge_intr_status[i0].build();
-                this.default_map.add_reg(this.posedge_intr_status[i0], 'h500 + i0*'h4);
-            end
-            foreach(this.negedge_intr_status[i0]) begin
-                this.negedge_intr_status[i0] = new($sformatf("negedge_intr_status[%0d]", i0));
-                this.negedge_intr_status[i0].configure(this);
-                
-                this.negedge_intr_status[i0].build();
-                this.default_map.add_reg(this.negedge_intr_status[i0], 'h600 + i0*'h4);
-            end
+            this.intr_status = new("intr_status");
+            this.intr_status.configure(this);
+
+            this.intr_status.build();
+            this.default_map.add_reg(this.intr_status, 'h500);
         endfunction : build
     endclass : gpio_ctrl_csr
 

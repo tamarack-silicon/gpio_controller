@@ -51,28 +51,136 @@ addrmap gpio_ctrl_csr {
 		} intr_enable[31:0];
 	};
 
-	reg posedge_intr_status_r {
-		name = "Positive Edge Interrupt Status Register";
+	reg intr_status_r {
+		name = "Interrupt Status Register";
 
 		field {
-			desc = "Positive Edge Interrupt Status";
+			desc = "Rising edge detected for pins [31:0]";
 			sw = rw;
 			hw = r;
 			onwrite = woclr;
 			hwset;
-		} intr_status[31:0];
-	};
-
-	reg negedge_intr_status_r {
-		name = "Negative Edge Interrupt Status Register";
+		} posedge_0;
 
 		field {
-			desc = "Negative Edge Interrupt Status";
+			desc = "Rising edge detected for pins [63:32]";
 			sw = rw;
 			hw = r;
 			onwrite = woclr;
 			hwset;
-		} intr_status[31:0];
+		} posedge_1;
+
+		field {
+			desc = "Rising edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} posedge_2;
+
+		field {
+			desc = "Rising edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} posedge_3;
+
+		field {
+			desc = "Rising edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} posedge_4;
+
+		field {
+			desc = "Rising edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} posedge_5;
+
+		field {
+			desc = "Rising edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} posedge_6;
+
+		field {
+			desc = "Rising edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} posedge_7;
+
+		field {
+			desc = "Falling edge detected for pins [31:0]";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} negedge_0;
+
+		field {
+			desc = "Falling edge detected for pins [63:32]";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} negedge_1;
+
+		field {
+			desc = "Falling edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} negedge_2;
+
+		field {
+			desc = "Falling edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} negedge_3;
+
+		field {
+			desc = "Falling edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} negedge_4;
+
+		field {
+			desc = "Falling edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} negedge_5;
+
+		field {
+			desc = "Falling edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} negedge_6;
+
+		field {
+			desc = "Falling edge detected for pins";
+			sw = rw;
+			hw = r;
+			onwrite = woclr;
+			hwset;
+		} negedge_7;
 	};
 
 	output_data_r output_data[8] @ 0x0 += 0x4;
@@ -80,6 +188,5 @@ addrmap gpio_ctrl_csr {
 	input_data_r input_data[8] @ 0x200 += 0x4;
 	posedge_intr_enable_r posedge_intr_enable[8] @ 0x300 += 0x4;
 	negedge_intr_enable_r negedge_intr_enable[8] @ 0x400 += 0x4;
-	posedge_intr_status_r posedge_intr_status[8] @ 0x500 += 0x4;
-	negedge_intr_status_r negedge_intr_status[8] @ 0x600 += 0x4;
+	intr_status_r intr_status @ 0x500;
 };

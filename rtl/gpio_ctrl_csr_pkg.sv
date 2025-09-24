@@ -5,7 +5,7 @@ package gpio_ctrl_csr_pkg;
 
     localparam GPIO_CTRL_CSR_DATA_WIDTH = 32;
     localparam GPIO_CTRL_CSR_MIN_ADDR_WIDTH = 11;
-    localparam GPIO_CTRL_CSR_SIZE = 'h620;
+    localparam GPIO_CTRL_CSR_SIZE = 'h504;
 
     typedef struct {
         logic [31:0] next;
@@ -17,24 +17,90 @@ package gpio_ctrl_csr_pkg;
 
     typedef struct {
         logic hwset;
-    } gpio_ctrl_csr__posedge_intr_status_r__intr_status__in_t;
-
-    typedef struct {
-        gpio_ctrl_csr__posedge_intr_status_r__intr_status__in_t intr_status;
-    } gpio_ctrl_csr__posedge_intr_status_r__in_t;
+    } gpio_ctrl_csr__intr_status_r__posedge_0__in_t;
 
     typedef struct {
         logic hwset;
-    } gpio_ctrl_csr__negedge_intr_status_r__intr_status__in_t;
+    } gpio_ctrl_csr__intr_status_r__posedge_1__in_t;
 
     typedef struct {
-        gpio_ctrl_csr__negedge_intr_status_r__intr_status__in_t intr_status;
-    } gpio_ctrl_csr__negedge_intr_status_r__in_t;
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__posedge_2__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__posedge_3__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__posedge_4__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__posedge_5__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__posedge_6__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__posedge_7__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__negedge_0__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__negedge_1__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__negedge_2__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__negedge_3__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__negedge_4__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__negedge_5__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__negedge_6__in_t;
+
+    typedef struct {
+        logic hwset;
+    } gpio_ctrl_csr__intr_status_r__negedge_7__in_t;
+
+    typedef struct {
+        gpio_ctrl_csr__intr_status_r__posedge_0__in_t posedge_0;
+        gpio_ctrl_csr__intr_status_r__posedge_1__in_t posedge_1;
+        gpio_ctrl_csr__intr_status_r__posedge_2__in_t posedge_2;
+        gpio_ctrl_csr__intr_status_r__posedge_3__in_t posedge_3;
+        gpio_ctrl_csr__intr_status_r__posedge_4__in_t posedge_4;
+        gpio_ctrl_csr__intr_status_r__posedge_5__in_t posedge_5;
+        gpio_ctrl_csr__intr_status_r__posedge_6__in_t posedge_6;
+        gpio_ctrl_csr__intr_status_r__posedge_7__in_t posedge_7;
+        gpio_ctrl_csr__intr_status_r__negedge_0__in_t negedge_0;
+        gpio_ctrl_csr__intr_status_r__negedge_1__in_t negedge_1;
+        gpio_ctrl_csr__intr_status_r__negedge_2__in_t negedge_2;
+        gpio_ctrl_csr__intr_status_r__negedge_3__in_t negedge_3;
+        gpio_ctrl_csr__intr_status_r__negedge_4__in_t negedge_4;
+        gpio_ctrl_csr__intr_status_r__negedge_5__in_t negedge_5;
+        gpio_ctrl_csr__intr_status_r__negedge_6__in_t negedge_6;
+        gpio_ctrl_csr__intr_status_r__negedge_7__in_t negedge_7;
+    } gpio_ctrl_csr__intr_status_r__in_t;
 
     typedef struct {
         gpio_ctrl_csr__input_data_r__in_t input_data[8];
-        gpio_ctrl_csr__posedge_intr_status_r__in_t posedge_intr_status[8];
-        gpio_ctrl_csr__negedge_intr_status_r__in_t negedge_intr_status[8];
+        gpio_ctrl_csr__intr_status_r__in_t intr_status;
     } gpio_ctrl_csr__in_t;
 
     typedef struct {
@@ -70,27 +136,93 @@ package gpio_ctrl_csr_pkg;
     } gpio_ctrl_csr__negedge_intr_enable_r__out_t;
 
     typedef struct {
-        logic [31:0] value;
-    } gpio_ctrl_csr__posedge_intr_status_r__intr_status__out_t;
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__posedge_0__out_t;
 
     typedef struct {
-        gpio_ctrl_csr__posedge_intr_status_r__intr_status__out_t intr_status;
-    } gpio_ctrl_csr__posedge_intr_status_r__out_t;
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__posedge_1__out_t;
 
     typedef struct {
-        logic [31:0] value;
-    } gpio_ctrl_csr__negedge_intr_status_r__intr_status__out_t;
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__posedge_2__out_t;
 
     typedef struct {
-        gpio_ctrl_csr__negedge_intr_status_r__intr_status__out_t intr_status;
-    } gpio_ctrl_csr__negedge_intr_status_r__out_t;
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__posedge_3__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__posedge_4__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__posedge_5__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__posedge_6__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__posedge_7__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__negedge_0__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__negedge_1__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__negedge_2__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__negedge_3__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__negedge_4__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__negedge_5__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__negedge_6__out_t;
+
+    typedef struct {
+        logic value;
+    } gpio_ctrl_csr__intr_status_r__negedge_7__out_t;
+
+    typedef struct {
+        gpio_ctrl_csr__intr_status_r__posedge_0__out_t posedge_0;
+        gpio_ctrl_csr__intr_status_r__posedge_1__out_t posedge_1;
+        gpio_ctrl_csr__intr_status_r__posedge_2__out_t posedge_2;
+        gpio_ctrl_csr__intr_status_r__posedge_3__out_t posedge_3;
+        gpio_ctrl_csr__intr_status_r__posedge_4__out_t posedge_4;
+        gpio_ctrl_csr__intr_status_r__posedge_5__out_t posedge_5;
+        gpio_ctrl_csr__intr_status_r__posedge_6__out_t posedge_6;
+        gpio_ctrl_csr__intr_status_r__posedge_7__out_t posedge_7;
+        gpio_ctrl_csr__intr_status_r__negedge_0__out_t negedge_0;
+        gpio_ctrl_csr__intr_status_r__negedge_1__out_t negedge_1;
+        gpio_ctrl_csr__intr_status_r__negedge_2__out_t negedge_2;
+        gpio_ctrl_csr__intr_status_r__negedge_3__out_t negedge_3;
+        gpio_ctrl_csr__intr_status_r__negedge_4__out_t negedge_4;
+        gpio_ctrl_csr__intr_status_r__negedge_5__out_t negedge_5;
+        gpio_ctrl_csr__intr_status_r__negedge_6__out_t negedge_6;
+        gpio_ctrl_csr__intr_status_r__negedge_7__out_t negedge_7;
+    } gpio_ctrl_csr__intr_status_r__out_t;
 
     typedef struct {
         gpio_ctrl_csr__output_data_r__out_t output_data[8];
         gpio_ctrl_csr__output_enable_r__out_t output_enable[8];
         gpio_ctrl_csr__posedge_intr_enable_r__out_t posedge_intr_enable[8];
         gpio_ctrl_csr__negedge_intr_enable_r__out_t negedge_intr_enable[8];
-        gpio_ctrl_csr__posedge_intr_status_r__out_t posedge_intr_status[8];
-        gpio_ctrl_csr__negedge_intr_status_r__out_t negedge_intr_status[8];
+        gpio_ctrl_csr__intr_status_r__out_t intr_status;
     } gpio_ctrl_csr__out_t;
 endpackage

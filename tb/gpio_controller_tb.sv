@@ -1,6 +1,6 @@
 module gpio_controller_tb;
 
-    logic        sys_clk;
+    logic        clk;
     logic        rst_n;
     logic [11:0] paddr;
     logic        pwrite;
@@ -12,13 +12,15 @@ module gpio_controller_tb;
     logic        pready;
     logic		 pslverr;
 
+	logic		 interrupt;
+
     logic [255:0] gpio_in_data;
     logic [255:0] gpio_out_data;
 	logic [255:0] gpio_out_enable;
 
     gpio_controller u_gpio_controller (.*);
 
-    clocking apb_clk @(posedge sys_clk);
+    clocking apb_clk @(posedge clk);
 
         output paddr;
         output pwrite;
@@ -80,10 +82,10 @@ module gpio_controller_tb;
     end
 
     initial begin
-        sys_clk = 1'b0;
+        clk = 1'b0;
         forever begin
             #10;
-            sys_clk = ~sys_clk;
+            clk = ~clk;
         end
     end
 
