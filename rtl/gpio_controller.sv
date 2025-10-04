@@ -3,7 +3,7 @@ module gpio_controller (
     input logic			 clk,
     input logic			 rst_n,
     // APB Interface
-    input logic [11:0]	 paddr,
+	input logic [10:0]	 paddr,
     input logic			 pwrite,
     input logic			 psel,
     input logic			 penable,
