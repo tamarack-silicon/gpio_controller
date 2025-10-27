@@ -1,5 +1,14 @@
+# Output directory
 sim
 netlist
+deliverable
+
+# Temporary file lists
 rtl_filelist.f
 verif_filelist.f
+
+# Synthesis flow temporary files
+abc.history
+
+# Sphinx output directory
 _build
