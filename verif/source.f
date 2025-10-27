@@ -4,4 +4,5 @@ gpio_if.sv
 apb_agent_pkg.sv
 gpio_controller_test_pkg.sv
 gpio_ctrl_csr_ral_pkg.sv
+gpio_controller_reg_env_pkg.sv
 gpio_controller_verif_tb.sv

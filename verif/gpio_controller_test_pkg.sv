@@ -40,8 +40,11 @@ package gpio_controller_test_pkg;
 			rst_vif.rst_n = 1'b0; // FIXME modport
 			#100;
 			rst_vif.rst_n = 1'b1; // FIXME modport
+			#100;
 
 			phase.drop_objection(phase);
+
+			$finish;
 		endtask // run_phase
 
 	endclass
