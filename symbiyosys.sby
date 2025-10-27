@@ -1,0 +1,17 @@
+[tasks]
+bmc
+prove
+cover
+
+[options]
+cover: mode cover
+prove: mode prove
+bmc: mode bmc
+
+[engines]
+smtbmc z3
+
+[script]
+plugin -i slang
+read_slang -F ../../rtl/source.f
+prep -top gpio_controller
