@@ -4,7 +4,7 @@ module gpio_controller_verif_tb;
 
 	rst_if i_rst_if();
 	apb_if i_apb_if(.clk(clk));
-	gpio_if i_gpio_if();
+	gpio_if i_gpio_if(.clk(clk));
 
 	gpio_controller u_gpio_ctrl (
 		.clk(clk),
@@ -34,7 +34,7 @@ module gpio_controller_verif_tb;
     initial begin
         clk = 1'b0;
         forever begin
-            #10;
+            #1;
             clk = ~clk;
         end
     end

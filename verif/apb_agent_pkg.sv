@@ -60,7 +60,16 @@ package apb_agent_pkg;
 			apb_vif.requester_cb.pwdata <= m_item.pwdata;
 			@(apb_vif.requester_cb);
 			apb_vif.requester_cb.penable <= 1'b1;
-			repeat(10) @(apb_vif.requester_cb); // FIXME check pready
+			@(apb_vif.requester_cb);
+			for(integer i = 0; i < 64; i++) begin // Timeout 64 cycles
+				if(apb_vif.requester_cb.pready) begin
+					apb_vif.requester_cb.psel <= 1'b0;
+					apb_vif.requester_cb.penable <= 1'b0;
+					break;
+				end else begin
+					@(apb_vif.requester_cb);
+				end
+			end
 		endtask // drive_item
 
 	endclass // apb_driver
