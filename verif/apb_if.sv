@@ -2,7 +2,7 @@ interface apb_if (
 	input logic clk
 );
 
-    logic [11:0] paddr;
+    logic [10:0] paddr;
     logic        pwrite;
     logic        psel;
     logic        penable;
@@ -11,6 +11,16 @@ interface apb_if (
     logic [31:0] prdata;
     logic        pready;
     logic		 pslverr;
+
+	clocking requester_cb @(posedge clk);
+		input prdata, pready, pslverr;
+		output paddr, pwrite, psel, penable, pstrb, pwdata;
+	endclocking // requester_cb
+
+	clocking completer_cb @(posedge clk);
+		input paddr, pwrite, psel, penable, pstrb, pwdata;
+		output prdata, pready, pslverr;
+	endclocking // completer_cb
 
 	modport requester (
 		input prdata, pready, pslverr,
