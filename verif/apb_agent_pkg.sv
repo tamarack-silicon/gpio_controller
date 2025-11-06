@@ -41,7 +41,7 @@ package apb_agent_pkg;
 
 		virtual function void build_phase(uvm_phase phase);
 			super.build_phase(phase);
-			if(!uvm_config_db#(virtual apb_if)::get(this, "", "apb_vif", apb_vif)) begin
+			if(!uvm_config_db#(virtual apb_if)::get(this, "uvm_test_top", "apb_vif", apb_vif)) begin
 				`uvm_fatal("APB_DRV", "Cannot get virtual interface")
 			end
 		endfunction // build_phase
@@ -81,12 +81,52 @@ package apb_agent_pkg;
 
 	endclass // apb_driver
 
+	class apb_monitor extends uvm_monitor;
+
+		`uvm_component_utils(apb_monitor)
+
+		function new(string name = "apb_monitor", uvm_component parent = null);
+			super.new(name, parent);
+		endfunction // new
+
+		uvm_analysis_port #(apb_item) mon_analysis_port;
+		virtual apb_if apb_vif;
+
+		virtual function void build_phase(uvm_phase phase);
+			super.build_phase(phase);
+
+			if(!uvm_config_db#(virtual apb_if)::get(this, "uvm_test_top", "apb_vif", apb_vif)) begin
+				`uvm_fatal("APB_MON", "Could not get vif")
+			end
+
+			mon_analysis_port = new("mon_analysis_port", this);
+		endfunction // build_phase
+
+		virtual task run_task(uvm_phase phase);
+			automatic apb_item m_item = apb_item::type_id::create("apb_item");
+
+			super.run_phase(phase);
+
+			forever begin
+
+				@(apb_vif.requester_cb); // FIXME make sure DUT is out of reset
+				// FIXME capture data
+
+				m_item.print();
+				mon_analysis_port.write(m_item);
+
+			end
+		endtask // run_task
+
+	endclass
+
 	class apb_agent extends uvm_agent;
 
 		`uvm_component_utils(apb_agent)
 
-		apb_driver driver;
-		uvm_sequencer#(apb_item) sequencer;
+		apb_driver m_driver;
+		apb_monitor m_monitor;
+		uvm_sequencer#(apb_item) m_sequencer;
 
 		function new(string name = "apb_agent", uvm_component parent = null);
 			super.new(name, parent);
@@ -94,10 +134,16 @@ package apb_agent_pkg;
 
 		virtual function void build_phase(uvm_phase phase);
 			super.build_phase(phase);
-			sequencer = uvm_sequencer#(apb_item)::type_id::create("sequencer", this);
-			driver = apb_driver::type_id::create("driver", this);
+			m_sequencer = uvm_sequencer#(apb_item)::type_id::create("sequencer", this);
+			m_driver = apb_driver::type_id::create("driver", this);
+			m_monitor = apb_monitor::type_id::create("apb_monitor", this);
 		endfunction // build_phase
 
+		virtual function void connect_phase(uvm_phase phase);
+			super.connect_phase(phase);
+			m_driver.seq_item_port.connect(m_sequencer.seq_item_export);
+		endfunction // connect_phase
+		
 	endclass // apb_agent
 
 endpackage // apb_agent_pkg

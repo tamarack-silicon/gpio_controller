@@ -135,6 +135,9 @@ package gpio_ctrl_csr_ral_pkg;
 
     // Addrmap - gpio_ctrl_csr
     class gpio_ctrl_csr extends uvm_reg_block;
+
+		`uvm_object_utils(gpio_ctrl_csr)
+
         rand gpio_ctrl_csr__output_data_r output_data[8];
         rand gpio_ctrl_csr__output_enable_r output_enable[8];
         rand gpio_ctrl_csr__input_data_r input_data[8];
