@@ -4,6 +4,7 @@ package gpio_controller_test_pkg;
 
 	import uvm_pkg::*;
 	import apb_agent_pkg::*;
+	import gpio_agent_pkg::*;
 
 	class gpio_controller_env extends uvm_env;
 
