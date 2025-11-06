@@ -6,8 +6,6 @@ package apb_agent_pkg;
 
 	class apb_item extends uvm_sequence_item;
 
-		`uvm_object_utils(apb_item)
-
 		function new(string name = "apb_item");
 			super.new(name);
 		endfunction // new
@@ -19,6 +17,15 @@ package apb_agent_pkg;
 
 		bit [31:0]		prdata;
 		bit				pslverr;
+
+		`uvm_object_utils_begin(apb_item)
+			`uvm_field_int(paddr, UVM_DEFAULT)
+			`uvm_field_int(pwrite, UVM_DEFAULT)
+			`uvm_field_int(pstrb, UVM_DEFAULT)
+			`uvm_field_int(pwdata, UVM_DEFAULT)
+			`uvm_field_int(prdata, UVM_DEFAULT)
+			`uvm_field_int(pslverr, UVM_DEFAULT)
+		`uvm_object_utils_end
 
 	endclass // apb_item
 

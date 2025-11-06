@@ -6,8 +6,6 @@ package gpio_agent_pkg;
 
 	class gpio_item extends uvm_sequence_item;
 
-		`uvm_object_utils(gpio_item)
-
 		function new(string name = "gpio_item");
 			super.new(name);
 		endfunction // new
@@ -15,6 +13,12 @@ package gpio_agent_pkg;
 		rand bit [255:0] gpio_in_data;
 		bit [255:0]		 gpio_out_data;
 		bit [255:0]		 gpio_out_enable;
+
+		`uvm_object_utils_begin(gpio_item)
+			`uvm_field_int(gpio_in_data, UVM_DEFAULT)
+			`uvm_field_int(gpio_out_data, UVM_DEFAULT)
+			`uvm_field_int(gpio_out_enable, UVM_DEFAULT)
+		`uvm_object_utils_end
 
 	endclass // gpio_item
 
