@@ -30,4 +30,16 @@ module gpio_controller_intr (
 		end
 	end
 
+`ifdef FORMAL
+
+	// If an interrupt is disabled then the edge detected signal shall always be deasserted
+	always_comb begin
+		for(integer i=0; i<256; i++) begin
+			if(posedge_intr_enable[i] == 1'b0) assert(posedge_detected[i] == 1'b0);
+			if(negedge_intr_enable[i] == 1'b0) assert(negedge_detected[i] == 1'b0);
+		end
+	end
+
+`endif
+
 endmodule // gpio_controller_intr
