@@ -8,6 +8,8 @@ package gpio_ctrl_csr_ral_pkg;
     class gpio_ctrl_csr__output_data_r extends uvm_reg;
         rand uvm_reg_field odata;
 
+		`uvm_object_utils(gpio_ctrl_csr__output_data_r)
+
         function new(string name = "gpio_ctrl_csr__output_data_r");
             super.new(name, 32, UVM_NO_COVERAGE);
         endfunction : new
@@ -21,6 +23,8 @@ package gpio_ctrl_csr_ral_pkg;
     // Reg - gpio_ctrl_csr::output_enable_r
     class gpio_ctrl_csr__output_enable_r extends uvm_reg;
         rand uvm_reg_field oenable;
+
+		`uvm_object_utils(gpio_ctrl_csr__output_enable_r)
 
         function new(string name = "gpio_ctrl_csr__output_enable_r");
             super.new(name, 32, UVM_NO_COVERAGE);
@@ -36,6 +40,8 @@ package gpio_ctrl_csr_ral_pkg;
     class gpio_ctrl_csr__input_data_r extends uvm_reg;
         rand uvm_reg_field idata;
 
+		`uvm_object_utils(gpio_ctrl_csr__input_data_r)
+
         function new(string name = "gpio_ctrl_csr__input_data_r");
             super.new(name, 32, UVM_NO_COVERAGE);
         endfunction : new
@@ -50,6 +56,8 @@ package gpio_ctrl_csr_ral_pkg;
     class gpio_ctrl_csr__posedge_intr_enable_r extends uvm_reg;
         rand uvm_reg_field intr_enable;
 
+		`uvm_object_utils(gpio_ctrl_csr__posedge_intr_enable_r)
+
         function new(string name = "gpio_ctrl_csr__posedge_intr_enable_r");
             super.new(name, 32, UVM_NO_COVERAGE);
         endfunction : new
@@ -63,6 +71,8 @@ package gpio_ctrl_csr_ral_pkg;
     // Reg - gpio_ctrl_csr::negedge_intr_enable_r
     class gpio_ctrl_csr__negedge_intr_enable_r extends uvm_reg;
         rand uvm_reg_field intr_enable;
+
+		`uvm_object_utils(gpio_ctrl_csr__negedge_intr_enable_r)
 
         function new(string name = "gpio_ctrl_csr__negedge_intr_enable_r");
             super.new(name, 32, UVM_NO_COVERAGE);
@@ -92,6 +102,8 @@ package gpio_ctrl_csr_ral_pkg;
         rand uvm_reg_field negedge_5;
         rand uvm_reg_field negedge_6;
         rand uvm_reg_field negedge_7;
+
+		`uvm_object_utils(gpio_ctrl_csr__intr_status_r)
 
         function new(string name = "gpio_ctrl_csr__intr_status_r");
             super.new(name, 32, UVM_NO_COVERAGE);
@@ -135,6 +147,9 @@ package gpio_ctrl_csr_ral_pkg;
 
     // Addrmap - gpio_ctrl_csr
     class gpio_ctrl_csr extends uvm_reg_block;
+
+		`uvm_object_utils(gpio_ctrl_csr)
+
         rand gpio_ctrl_csr__output_data_r output_data[8];
         rand gpio_ctrl_csr__output_enable_r output_enable[8];
         rand gpio_ctrl_csr__input_data_r input_data[8];
@@ -147,7 +162,7 @@ package gpio_ctrl_csr_ral_pkg;
         endfunction : new
 
         virtual function void build();
-            this.default_map = create_map("reg_map", 0, 4, UVM_NO_ENDIAN);
+            this.default_map = create_map("reg_map", 0, 4, UVM_LITTLE_ENDIAN);
             foreach(this.output_data[i0]) begin
                 this.output_data[i0] = new($sformatf("output_data[%0d]", i0));
                 this.output_data[i0].configure(this);
