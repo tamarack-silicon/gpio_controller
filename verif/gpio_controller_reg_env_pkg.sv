@@ -21,8 +21,6 @@ package gpio_controller_reg_env_pkg;
 			m_item.pstrb = rw.byte_en;
 			m_item.pwdata = rw.data;
 
-			m_item.print();
-
 			return m_item;
 		endfunction // reg2bus
 
@@ -31,8 +29,6 @@ package gpio_controller_reg_env_pkg;
 			if(!$cast(m_item, bus_item)) begin
 				`uvm_fatal("reg2apb_adapter", "failed cast")
 			end
-
-			m_item.print();
 
 			rw.kind = m_item.pwrite ? UVM_WRITE : UVM_READ;
 			rw.addr = m_item.paddr;

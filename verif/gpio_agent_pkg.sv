@@ -78,19 +78,18 @@ package gpio_agent_pkg;
 			mon_analysis_port = new("mon_analysis_port", this);
 		endfunction // build_phase
 
-		virtual task run_task(uvm_phase phase);
+		virtual task run_phase(uvm_phase phase);
 			automatic gpio_item m_item = gpio_item::type_id::create("gpio_item");
 
 			super.run_phase(phase);
 
 			forever begin
 
-				@(gpio_vif.tb_cb); // FIXME make sure DUT is out of reset
-				m_item.gpio_out_enable = gpio_vif.tb_cb.gpio_out_enable;
-				m_item.gpio_out_data = gpio_vif.tb_cb.gpio_out_data;
-				// FIXME capture gpio_in_data
+				@(gpio_vif.clk); // FIXME make sure DUT is out of reset
+				m_item.gpio_out_enable = gpio_vif.gpio_out_enable;
+				m_item.gpio_out_data = gpio_vif.gpio_out_data;
+				m_item.gpio_in_data = gpio_vif.gpio_in_data;
 
-				m_item.print();
 				mon_analysis_port.write(m_item);
 
 			end

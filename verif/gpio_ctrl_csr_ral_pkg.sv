@@ -8,6 +8,8 @@ package gpio_ctrl_csr_ral_pkg;
     class gpio_ctrl_csr__output_data_r extends uvm_reg;
         rand uvm_reg_field odata;
 
+		`uvm_object_utils(gpio_ctrl_csr__output_data_r)
+
         function new(string name = "gpio_ctrl_csr__output_data_r");
             super.new(name, 32, UVM_NO_COVERAGE);
         endfunction : new
@@ -21,6 +23,8 @@ package gpio_ctrl_csr_ral_pkg;
     // Reg - gpio_ctrl_csr::output_enable_r
     class gpio_ctrl_csr__output_enable_r extends uvm_reg;
         rand uvm_reg_field oenable;
+
+		`uvm_object_utils(gpio_ctrl_csr__output_enable_r)
 
         function new(string name = "gpio_ctrl_csr__output_enable_r");
             super.new(name, 32, UVM_NO_COVERAGE);
@@ -36,6 +40,8 @@ package gpio_ctrl_csr_ral_pkg;
     class gpio_ctrl_csr__input_data_r extends uvm_reg;
         rand uvm_reg_field idata;
 
+		`uvm_object_utils(gpio_ctrl_csr__input_data_r)
+
         function new(string name = "gpio_ctrl_csr__input_data_r");
             super.new(name, 32, UVM_NO_COVERAGE);
         endfunction : new
@@ -50,6 +56,8 @@ package gpio_ctrl_csr_ral_pkg;
     class gpio_ctrl_csr__posedge_intr_enable_r extends uvm_reg;
         rand uvm_reg_field intr_enable;
 
+		`uvm_object_utils(gpio_ctrl_csr__posedge_intr_enable_r)
+
         function new(string name = "gpio_ctrl_csr__posedge_intr_enable_r");
             super.new(name, 32, UVM_NO_COVERAGE);
         endfunction : new
@@ -63,6 +71,8 @@ package gpio_ctrl_csr_ral_pkg;
     // Reg - gpio_ctrl_csr::negedge_intr_enable_r
     class gpio_ctrl_csr__negedge_intr_enable_r extends uvm_reg;
         rand uvm_reg_field intr_enable;
+
+		`uvm_object_utils(gpio_ctrl_csr__negedge_intr_enable_r)
 
         function new(string name = "gpio_ctrl_csr__negedge_intr_enable_r");
             super.new(name, 32, UVM_NO_COVERAGE);
@@ -92,6 +102,8 @@ package gpio_ctrl_csr_ral_pkg;
         rand uvm_reg_field negedge_5;
         rand uvm_reg_field negedge_6;
         rand uvm_reg_field negedge_7;
+
+		`uvm_object_utils(gpio_ctrl_csr__intr_status_r)
 
         function new(string name = "gpio_ctrl_csr__intr_status_r");
             super.new(name, 32, UVM_NO_COVERAGE);

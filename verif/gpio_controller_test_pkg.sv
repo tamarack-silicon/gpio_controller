@@ -26,6 +26,7 @@ package gpio_controller_test_pkg;
 			m_apb_agent = apb_agent::type_id::create("m_apb_agent", this);
 			m_gpio_agent = gpio_agent::type_id::create("m_gpio_agent", this);
 			m_reg_env = gpio_controller_reg_env::type_id::create("m_reg_env", this);
+			uvm_reg::include_coverage("*", UVM_CVR_ALL);
 		endfunction // build_phase
 
 		virtual function void connect_phase(uvm_phase phase);
@@ -69,16 +70,18 @@ package gpio_controller_test_pkg;
 			gpio_ctrl_csr m_ral_model;
 			uvm_status_e status;
 
+			logic [31:0] read_value;
+
 			uvm_config_db#(gpio_ctrl_csr)::get(null, "uvm_test_top", "m_ral_model", m_ral_model);
 
 			phase.raise_objection(phase);
 
 			`uvm_info("TEST", $sformatf("begin reset"), UVM_HIGH)
 			rst_vif.rst_n = 1'b0; // FIXME modport
-			#100;
+			#20;
 			`uvm_info("TEST", $sformatf("release from reset"), UVM_HIGH)
 			rst_vif.rst_n = 1'b1; // FIXME modport
-			#100;
+			#20;
 
 			m_env.m_reg_env.set_report_verbosity_level(UVM_HIGH);
 
@@ -91,12 +94,18 @@ package gpio_controller_test_pkg;
 			m_ral_model.output_data[0].odata.write(status, 32'h12345678);
 			m_ral_model.output_data[1].odata.write(status, 32'h90abcdef);
 
-			#100;
+			m_ral_model.output_data[0].odata.read(status, read_value);
+			`uvm_info("TEST", $sformatf("read value 0 = %x", read_value), UVM_HIGH)
+
+			m_ral_model.output_data[1].odata.read(status, read_value);
+			`uvm_info("TEST", $sformatf("read value 1 = %x", read_value), UVM_HIGH)
+
+			#20;
 
 			phase.drop_objection(phase);
 
-			$finish; // FIXME drop_objection should end simulation
-		endtask // main_phase
+			`uvm_fatal("TEST", "end of test")
+		endtask // run_phase
 
 	endclass
 

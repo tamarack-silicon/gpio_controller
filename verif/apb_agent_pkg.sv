@@ -103,19 +103,25 @@ package apb_agent_pkg;
 			mon_analysis_port = new("mon_analysis_port", this);
 		endfunction // build_phase
 
-		virtual task run_task(uvm_phase phase);
+		virtual task run_phase(uvm_phase phase);
 			automatic apb_item m_item = apb_item::type_id::create("apb_item");
 
 			super.run_phase(phase);
 
 			forever begin
 
-				@(apb_vif.requester_cb); // FIXME make sure DUT is out of reset
-				// FIXME capture data
+				@(apb_vif.clk); // FIXME use clocking block, make sure DUT is out of reset
+				if(apb_vif.psel && apb_vif.pready) begin
+					m_item.paddr = apb_vif.paddr;
+					m_item.pwrite = apb_vif.pwrite;
+					m_item.pstrb = apb_vif.pstrb;
+					m_item.pwdata = apb_vif.pwdata;
+					m_item.prdata = apb_vif.prdata;
+					m_item.pslverr = apb_vif.pslverr;
 
-				m_item.print();
-				mon_analysis_port.write(m_item);
-
+					m_item.print();
+					mon_analysis_port.write(m_item);
+				end
 			end
 		endtask // run_task
 
