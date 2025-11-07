@@ -85,20 +85,30 @@ package gpio_controller_test_pkg;
 
 			m_env.m_reg_env.set_report_verbosity_level(UVM_HIGH);
 
+			/*
 			m_reg_hw_reset_seq.model = m_env.m_reg_env.m_ral_model;
 			m_reg_hw_reset_seq.start(m_reg_hw_reset_seq.model.default_map.get_sequencer());
 
 			m_reg_access_seq.model = m_env.m_reg_env.m_ral_model; // FIXME backdoor access
 			m_reg_access_seq.start(m_reg_access_seq.model.default_map.get_sequencer());
+			*/
 
 			m_ral_model.output_data[0].odata.write(status, 32'h12345678);
 			m_ral_model.output_data[1].odata.write(status, 32'h90abcdef);
+			m_ral_model.output_data[2].odata.write(status, 32'h1a2b3c4d);
+			m_ral_model.output_data[3].odata.write(status, 32'haabbccdd);
+			m_ral_model.output_data[4].odata.write(status, 32'h11223344);
+			m_ral_model.output_data[5].odata.write(status, 32'h55667788);
+			m_ral_model.output_data[6].odata.write(status, 32'h1c2d3e4f);
+			m_ral_model.output_data[7].odata.write(status, 32'h6a7b8c9d);
 
-			m_ral_model.output_data[0].odata.read(status, read_value);
-			`uvm_info("TEST", $sformatf("read value 0 = %x", read_value), UVM_HIGH)
+			for(int i=0; i<8; i++) begin
+				m_ral_model.output_data[i].odata.read(status, read_value);
+			end
 
-			m_ral_model.output_data[1].odata.read(status, read_value);
-			`uvm_info("TEST", $sformatf("read value 1 = %x", read_value), UVM_HIGH)
+			for(int i=0; i<8; i++) begin
+				m_ral_model.input_data[i].idata.read(status, read_value);
+			end
 
 			#20;
 
