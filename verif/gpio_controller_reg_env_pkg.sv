@@ -20,6 +20,9 @@ package gpio_controller_reg_env_pkg;
 			m_item.pwrite = (rw.kind == UVM_WRITE) ? 1'b1 : 1'b0;
 			m_item.pstrb = rw.byte_en;
 			m_item.pwdata = rw.data;
+
+			m_item.print();
+
 			return m_item;
 		endfunction // reg2bus
 
@@ -28,6 +31,8 @@ package gpio_controller_reg_env_pkg;
 			if(!$cast(m_item, bus_item)) begin
 				`uvm_fatal("reg2apb_adapter", "failed cast")
 			end
+
+			m_item.print();
 
 			rw.kind = m_item.pwrite ? UVM_WRITE : UVM_READ;
 			rw.addr = m_item.paddr;
@@ -47,7 +52,6 @@ package gpio_controller_reg_env_pkg;
 		gpio_ctrl_csr m_ral_model;
 		reg2apb_adapter m_reg2apb;
 		uvm_reg_predictor#(apb_item) m_apb2reg_predictor;
-		apb_agent m_agent;
 
 		virtual function void build_phase(uvm_phase phase);
 			super.build_phase(phase);
@@ -64,6 +68,7 @@ package gpio_controller_reg_env_pkg;
 
 		virtual function void connect_phase(uvm_phase phase);
 			super.connect_phase(phase);
+
 			m_apb2reg_predictor.map = m_ral_model.default_map;
 			m_apb2reg_predictor.adapter = m_reg2apb;
 		endfunction // connect_phase

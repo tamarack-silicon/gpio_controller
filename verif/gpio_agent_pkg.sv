@@ -34,8 +34,8 @@ package gpio_agent_pkg;
 
 		virtual function void build_phase(uvm_phase phase);
 			super.build_phase(phase);
-			if(!uvm_config_db #(virtual gpio_if)::get(this, "uvm_test_top", "gpio_vif", gpio_vif)) begin
-				`uvm_fatal("GPIO_DRV", "Cannot get virtual interface")
+			if(!uvm_config_db#(virtual gpio_if)::get(null, "uvm_test_top", "gpio_vif", gpio_vif)) begin
+				`uvm_fatal("GPIO_DRV", "Could not get vif")
 			end
 		endfunction // build_phase
 
@@ -71,7 +71,7 @@ package gpio_agent_pkg;
 		virtual function void build_phase(uvm_phase phase);
 			super.build_phase(phase);
 
-			if(!uvm_config_db#(virtual gpio_if)::get(this, "uvm_test_top", "gpio_vif", gpio_vif)) begin
+			if(!uvm_config_db#(virtual gpio_if)::get(null, "uvm_test_top", "gpio_vif", gpio_vif)) begin
 				`uvm_fatal("GPIO_MON", "Could not get vif")
 			end
 

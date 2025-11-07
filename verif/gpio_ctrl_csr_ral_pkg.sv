@@ -150,7 +150,7 @@ package gpio_ctrl_csr_ral_pkg;
         endfunction : new
 
         virtual function void build();
-            this.default_map = create_map("reg_map", 0, 4, UVM_NO_ENDIAN);
+            this.default_map = create_map("reg_map", 0, 4, UVM_LITTLE_ENDIAN);
             foreach(this.output_data[i0]) begin
                 this.output_data[i0] = new($sformatf("output_data[%0d]", i0));
                 this.output_data[i0].configure(this);
