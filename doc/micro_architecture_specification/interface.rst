@@ -84,11 +84,6 @@ APB Interface
      - 1
      - APB SLVERR
      - clk
-   * - interrupt
-     - Output
-     - 1
-     - Active high level interrupt signal
-     - async
 
 Interrupt Interface
 ===================
