@@ -2,7 +2,7 @@
 IP_NAME := gpio_controller
 
 # CSR Block Name
-CSR_BLOCK_NAME := gpio_ctrl_csr
+CSR_BLOCK_NAME := gpio_ctrl_bank_csr
 
 # Design IP dependency in 'ip' folder
 RTL_IP_DEP := 
