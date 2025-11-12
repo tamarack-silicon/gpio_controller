@@ -7,9 +7,9 @@ Tamarack Silicon Project General Purpose Input/Output controller is a standard G
 Features
 ========
 
-- Support up to 512 IO pins
+- Support up to 1024 IO pins
 - Output enable control via CSR
-- Support trigger interrupt on input rising and falling edge
+- Support trigger interrupt on input level change(rising and falling edge)
 - Interrupt enable/disable control via CSR
 
 Standards

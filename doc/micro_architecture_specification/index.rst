@@ -12,7 +12,6 @@ Tamarack Silicon Project GPIO Controller Micro-Architecture Specification
    configuration.rst
    interface.rst
    data-format.rst
-   edge-detector.rst
    software.rst
    performance.rst
    synthesis.rst
