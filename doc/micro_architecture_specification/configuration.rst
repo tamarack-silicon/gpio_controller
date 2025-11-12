@@ -5,15 +5,17 @@ Configuration
 Parameters
 ==========
 
-.. list-table:: RTL Parameters
-   :widths: 20 80
+.. list-table:: Parameters
+   :widths: 25 25 50
    :class: longtable
    :header-rows: 1
 
-   * - Parameter name
+   * - Parameter Name
+     - Type
      - Description
-   * - PARAMETER
-     - Parameter description
+   * - NUM_BANKS
+     - integer
+     - Number of IO banks, each bank contains 32 IOs
 
 Macros
 ======

@@ -2,11 +2,11 @@
 Interfaces
 **********
 
-APB Interface
-=============
+Clock and reset
+===============
 
 .. list-table:: Module Ports
-   :widths: 15 20 15 40 10
+   :widths: 15 20 20 35 10
    :class: longtable
    :header-rows: 1
 
@@ -15,58 +15,120 @@ APB Interface
      - Port Width/Type
      - Port Description
      - Clock
-   * - apb_clk
+   * - clk
      - Input
      - 1
-     - APB Clock
+     - Input Clock
      - Clock
    * - rst_n
      - Input
      - 1
      - Active-low async reset
      - Async
-   * - apb_paddr
+
+APB Interface
+=============
+
+.. list-table:: Module Ports
+   :widths: 15 20 20 35 10
+   :class: longtable
+   :header-rows: 1
+
+   * - Port Name
+     - Port Direction
+     - Port Width/Type
+     - Port Description
+     - Clock
+   * - paddr
      - Input
      - 16
      - APB PADDR
-     - apb_clk
-   * - apb_pwrite
+     - clk
+   * - pwrite
      - Input
      - 1
      - APB PWRITE
-     - apb_clk
-   * - apb_psel
+     - clk
+   * - psel
      - Input
      - 1
      - APB PSEL
-     - apb_clk
-   * - apb_penable
+     - clk
+   * - penable
      - Input
      - 1
      - APB PENABLE
-     - apb_clk
-   * - apb_pwdata
+     - clk
+   * - pwdata
      - Input
      - 32
      - APB PWDATA
-     - apb_clk
-   * - apb_pstrb
+     - clk
+   * - pstrb
      - Input
      - 4
      - APB PSTRB
-     - apb_clk
-   * - apb_prdata
+     - clk
+   * - prdata
      - Output
      - 32
      - APB PRDATA
-     - apb_clk
-   * - apb_pready
+     - clk
+   * - pready
      - Output
      - 1
      - APB PREADY
-     - apb_clk
-   * - apb_slverr
+     - clk
+   * - slverr
      - Output
      - 1
      - APB SLVERR
-     - apb_clk
+     - clk
+
+Interrupt Interface
+===================
+
+.. list-table:: Module Ports
+   :widths: 15 20 20 35 10
+   :class: longtable
+   :header-rows: 1
+
+   * - Port Name
+     - Port Direction
+     - Port Width/Type
+     - Port Description
+     - Clock
+   * - interrupt
+     - Output
+     - 1
+     - Active high level interrupt signal
+     - async
+
+GPIO Interface
+==============
+
+.. list-table:: Module Ports
+   :widths: 15 20 20 35 10
+   :class: longtable
+   :header-rows: 1
+
+   * - Port Name
+     - Port Direction
+     - Port Width/Type
+     - Port Description
+     - Clock
+   * - gpio_in_data
+     - Input
+     - 32 * NUM_BANKS
+     - GPIO Input, note the signal is synced internally
+     - async
+   * - gpio_out_data
+     - Output
+     - 32 * NUM_BANKS
+     - GPIO data output
+     - clk
+   * - gpio_out_enable
+     - Output
+     - 32 * NUM_BANKS
+     - GPIO output enable control, connect to "Output Enable" signal of tri-state buffer
+     - clk
