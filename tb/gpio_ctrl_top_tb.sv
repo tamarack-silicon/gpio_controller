@@ -1,4 +1,4 @@
-module gpio_controller_tb;
+module gpio_ctrl_top_tb;
 
     logic        clk;
     logic        rst_n;
@@ -18,7 +18,7 @@ module gpio_controller_tb;
     logic [255:0] gpio_out_data;
 	logic [255:0] gpio_out_enable;
 
-    gpio_controller u_gpio_controller (.*);
+    gpio_ctrl_top u_dut (.*);
 
     clocking apb_clk @(posedge clk);
 
@@ -153,8 +153,8 @@ module gpio_controller_tb;
     end
 
     initial begin
-        $dumpfile("gpio_controller_tb.vcd");
+        $dumpfile("gpio_ctrl_top_tb.vcd");
         $dumpvars;
     end
 
-endmodule // gpio_controller_tb
+endmodule // gpio_ctrl_top_tb
