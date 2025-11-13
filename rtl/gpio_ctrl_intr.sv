@@ -1,4 +1,4 @@
-module gpio_controller_intr (
+module gpio_ctrl_intr (
 	input logic			 clk,
 	input logic			 rst_n,
 	input logic [255:0]	 gpio_in_data,
@@ -42,4 +42,4 @@ module gpio_controller_intr (
 
 `endif
 
-endmodule // gpio_controller_intr
+endmodule // gpio_ctrl_intr

@@ -1,4 +1,4 @@
-module gpio_controller (
+module gpio_ctrl_top (
     // Clock and resets
     input logic			 clk,
     input logic			 rst_n,
@@ -42,7 +42,7 @@ module gpio_controller (
 
     logic [255:0] gpio_in_data_synced;
 
-	gpio_controller_cdc_sync #(
+	gpio_ctrl_cdc_sync #(
 		.WIDTH(256)
 	) u_sync (
 		.clk(clk),
@@ -56,7 +56,7 @@ module gpio_controller (
 	logic [7:0] posedge_intr_status_set;
 	logic [7:0] negedge_intr_status_set;
 
-	gpio_controller_intr u_intr (
+	gpio_ctrl_intr u_intr (
 		.clk(clk),
 		.rst_n(rst_n),
 		.gpio_in_data(gpio_in_data_synced),
@@ -146,4 +146,4 @@ module gpio_controller (
 						 csr_out.intr_status.negedge_6.value,
 						 csr_out.intr_status.negedge_7.value};
 
-endmodule // gpio_controller
+endmodule // gpio_ctrl_top

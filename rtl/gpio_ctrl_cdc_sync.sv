@@ -1,4 +1,4 @@
-module gpio_controller_cdc_sync #(
+module gpio_ctrl_cdc_sync #(
 	parameter WIDTH = 1
 ) (
 	input logic				 clk,
@@ -18,4 +18,4 @@ module gpio_controller_cdc_sync #(
 		end
 	end
 
-endmodule // gpio_controller_cdc_sync
+endmodule // gpio_ctrl_cdc_sync
