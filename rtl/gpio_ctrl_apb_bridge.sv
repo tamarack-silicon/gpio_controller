@@ -35,13 +35,42 @@ module gpio_ctrl_apb_bridge #(
 	input logic							downstream_intr_status_pslverr
 );
 
-	assign downstream_intr_status_pwrite = upstream_pwrite;
-	assign downstream_intr_status_psel = upstream_psel & (upstream_paddr == 'h200);
-	assign downstream_intr_status_penable = upstream_penable;
-	assign downstream_intr_status_pstrb = upstream_pstrb;
-	assign downstream_intr_status_pwdata = upstream_pwdata;
-	assign upstream_prdata = downstream_intr_status_prdata;
-	assign upstream_pready = downstream_intr_status_pready;
-	assign upstream_pslverr = downstream_intr_status_pslverr;
+	always_comb begin
+		for(integer i = 0; i < NUM_BANKS; i++) begin
+			downstream_bank_paddr[i] = upstream_paddr[3:0];
+			downstream_bank_pwrite[i] = upstream_pwrite;
+			downstream_bank_psel[i] = 1'b0;
+
+			if(upstream_paddr[9] == 1'b0) begin // paddr < 'h200
+				downstream_bank_psel[upstream_paddr[8:4]] = upstream_psel;
+			end
+
+			downstream_bank_penable[i] = upstream_penable;
+			downstream_bank_pstrb[i] = upstream_pstrb;
+			downstream_bank_pwdata[i] = upstream_pwdata;
+		end
+
+		downstream_intr_status_pwrite = upstream_pwrite;
+		downstream_intr_status_psel = upstream_psel & (upstream_paddr == 'h200);
+		downstream_intr_status_penable = upstream_penable;
+		downstream_intr_status_pstrb = upstream_pstrb;
+		downstream_intr_status_pwdata = upstream_pwdata;
+	end
+
+	always_comb begin
+		upstream_prdata = 32'h0;
+		upstream_pready = 1'b0;
+		upstream_pslverr = 1'b0;
+
+		if(upstream_paddr == 10'h200) begin
+			upstream_prdata = downstream_intr_status_prdata;
+			upstream_pready = downstream_intr_status_pready;
+			upstream_pslverr = downstream_intr_status_pslverr;
+		end else if(upstream_paddr[9] == 1'b0) begin
+			upstream_prdata = downstream_bank_prdata[upstream_paddr[8:4]];
+			upstream_pready = downstream_bank_pready[upstream_paddr[8:4]];
+			upstream_pslverr = downstream_bank_pslverr[upstream_paddr[8:4]];
+		end
+	end
 
 endmodule // gpio_ctrl_apb_bridge

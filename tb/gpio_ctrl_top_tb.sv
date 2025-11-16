@@ -2,7 +2,8 @@ module gpio_ctrl_top_tb;
 
     logic        clk;
     logic        rst_n;
-    logic [10:0] paddr;
+
+    logic [9:0] paddr;
     logic        pwrite;
     logic        psel;
     logic        penable;
@@ -18,7 +19,9 @@ module gpio_ctrl_top_tb;
     logic [255:0] gpio_out_data;
 	logic [255:0] gpio_out_enable;
 
-    gpio_ctrl_top u_dut (.*);
+    gpio_ctrl_top #(
+		.NUM_BANKS(8)
+	) u_dut (.*);
 
     clocking apb_clk @(posedge clk);
 
@@ -38,7 +41,7 @@ module gpio_ctrl_top_tb;
     initial begin
         rst_n = 1'b0;
 
-        paddr = 11'h0;
+        paddr = 10'h0;
         pwrite = 1'b0;
         psel = 1'b0;
         penable = 1'b0;
@@ -54,7 +57,7 @@ module gpio_ctrl_top_tb;
 		// Test GPIO output
 
         @apb_clk;
-        apb_clk.paddr <= 11'h0;
+        apb_clk.paddr <= 10'h4;
         apb_clk.pwrite <= 1'b1;
         apb_clk.psel <= 1'b1;
         apb_clk.pwdata <= 32'h12345678;
@@ -70,7 +73,7 @@ module gpio_ctrl_top_tb;
 		// Test GPIO input
 
         @apb_clk;
-        apb_clk.paddr <= 11'h204;
+        apb_clk.paddr <= 10'h18;
         apb_clk.pwrite <= 1'b0;
         apb_clk.psel <= 1'b1;
         @apb_clk;
@@ -91,7 +94,7 @@ module gpio_ctrl_top_tb;
 		// Enable Rising edge interrupt on 3rd GPIO bank
 
         @apb_clk;
-        apb_clk.paddr <= 11'h308;
+        apb_clk.paddr <= 10'h2C;
         apb_clk.pwrite <= 1'b1;
         apb_clk.psel <= 1'b1;
         apb_clk.pwdata <= 32'hffffffff;
@@ -113,7 +116,7 @@ module gpio_ctrl_top_tb;
 		// Read interrupt status register
 
         @apb_clk;
-        apb_clk.paddr <= 11'h500;
+        apb_clk.paddr <= 10'h200;
         apb_clk.pwrite <= 1'b0;
         apb_clk.psel <= 1'b1;
         @apb_clk;
@@ -128,7 +131,7 @@ module gpio_ctrl_top_tb;
 		// Clear interrupt
 
         @apb_clk;
-        apb_clk.paddr <= 11'h500;
+        apb_clk.paddr <= 10'h200;
         apb_clk.pwrite <= 1'b1;
         apb_clk.psel <= 1'b1;
         apb_clk.pwdata <= 32'h00000004;

@@ -110,6 +110,11 @@ module gpio_ctrl_top #(
 
 		logic [31:0] gpio_in_data_synced;
 
+		gpio_ctrl_bank_csr_pkg::gpio_ctrl_bank_csr__in_t csr_in;
+		gpio_ctrl_bank_csr_pkg::gpio_ctrl_bank_csr__out_t csr_out;
+
+		logic [31:0] intr_enable;
+
 		gpio_ctrl_cdc_sync #(
 			.WIDTH(32)
 		) u_sync (
@@ -123,9 +128,31 @@ module gpio_ctrl_top #(
 			.clk(clk),
 			.rst_n(rst_n),
 			.gpio_in_data(gpio_in_data_synced),
-			.intr_enable(32'hffffffff),
+			.intr_enable(intr_enable),
 			.intr_status_set(edge_detected[i])
 		);
+
+		gpio_ctrl_bank_csr u_bank_csr (
+			.clk(clk),
+			.arst_n(rst_n),
+			.s_apb_psel(bank_psel[i]),
+			.s_apb_penable(bank_penable[i]),
+			.s_apb_pwrite(bank_pwrite[i]),
+			.s_apb_pprot(3'h0),
+			.s_apb_paddr(bank_paddr[i]),
+			.s_apb_pwdata(bank_pwdata[i]),
+			.s_apb_pstrb(bank_pstrb[i]),
+			.s_apb_pready(bank_pready[i]),
+			.s_apb_prdata(bank_prdata[i]),
+			.s_apb_pslverr(bank_pslverr[i]),
+			.hwif_in(csr_in),
+			.hwif_out(csr_out)
+		);
+
+		assign csr_in.input_data.idata.next = gpio_in_data_synced;
+		assign gpio_out_data[i*32 +: 32] = csr_out.output_data.odata.value;
+		assign gpio_out_enable[i*32 +: 32] = csr_out.output_enable.oenable.value;
+		assign intr_enable = csr_out.intr_enable.intr_enable.value;
 
 	end
 
