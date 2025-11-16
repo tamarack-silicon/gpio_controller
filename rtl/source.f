@@ -1,5 +1,7 @@
 gpio_ctrl_bank_csr_pkg.sv
 gpio_ctrl_bank_csr.sv
-gpio_ctrl_intr.sv
+gpio_ctrl_edge_detect.sv
 gpio_ctrl_cdc_sync.sv
+gpio_ctrl_intr_status_csr.sv
+gpio_ctrl_apb_bridge.sv
 gpio_ctrl_top.sv

@@ -1,5 +1,5 @@
 `verilator_config
 
 lint_off -file "ip/*"
-lint_off -file "rtl/gpio_ctrl_csr.sv"
-lint_off -file "rtl/gpio_ctrl_csr_pkg.sv"
+lint_off -file "rtl/gpio_ctrl_bank_csr.sv"
+lint_off -file "rtl/gpio_ctrl_bank_csr_pkg.sv"
