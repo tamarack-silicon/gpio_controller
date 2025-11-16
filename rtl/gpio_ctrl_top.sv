@@ -47,9 +47,6 @@ module gpio_ctrl_top #(
 	gpio_ctrl_apb_bridge #(
 		.NUM_BANKS(NUM_BANKS)
 	) u_apb_bridge (
-		// Clock and reset
-		.clk(clk),
-		.rst_n(rst_n),
 		// Upstream APB Interface
 		.upstream_paddr(paddr),
 		.upstream_pwrite(pwrite),

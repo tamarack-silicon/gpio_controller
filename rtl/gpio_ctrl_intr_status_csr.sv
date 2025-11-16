@@ -1,5 +1,5 @@
 module gpio_ctrl_intr_status_csr #(
-	parameter NUM_BANKS = 4
+	parameter NUM_BANKS = 8
 ) (
     // Clock and reset
     input logic					clk,

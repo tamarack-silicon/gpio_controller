@@ -1,9 +1,6 @@
 module gpio_ctrl_apb_bridge #(
-	parameter NUM_BANKS = 4
+	parameter NUM_BANKS = 8
 ) (
-    // Clock and reset
-    input logic							clk,
-    input logic							rst_n,
     // Upstream APB Interface
 	input logic [9:0]					upstream_paddr,
     input logic							upstream_pwrite,
@@ -42,7 +39,7 @@ module gpio_ctrl_apb_bridge #(
 			downstream_bank_psel[i] = 1'b0;
 
 			if(upstream_paddr[9] == 1'b0) begin // paddr < 'h200
-				downstream_bank_psel[upstream_paddr[8:4]] = upstream_psel;
+				downstream_bank_psel[upstream_paddr[$clog2(NUM_BANKS)+3:4]] = upstream_psel;
 			end
 
 			downstream_bank_penable[i] = upstream_penable;
@@ -67,9 +64,9 @@ module gpio_ctrl_apb_bridge #(
 			upstream_pready = downstream_intr_status_pready;
 			upstream_pslverr = downstream_intr_status_pslverr;
 		end else if(upstream_paddr[9] == 1'b0) begin
-			upstream_prdata = downstream_bank_prdata[upstream_paddr[8:4]];
-			upstream_pready = downstream_bank_pready[upstream_paddr[8:4]];
-			upstream_pslverr = downstream_bank_pslverr[upstream_paddr[8:4]];
+			upstream_prdata = downstream_bank_prdata[upstream_paddr[$clog2(NUM_BANKS)+3:4]];
+			upstream_pready = downstream_bank_pready[upstream_paddr[$clog2(NUM_BANKS)+3:4]];
+			upstream_pslverr = downstream_bank_pslverr[upstream_paddr[$clog2(NUM_BANKS)+3:4]];
 		end
 	end
 
