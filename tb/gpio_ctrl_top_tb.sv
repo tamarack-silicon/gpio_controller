@@ -45,7 +45,7 @@ module gpio_ctrl_top_tb;
         pwrite = 1'b0;
         psel = 1'b0;
         penable = 1'b0;
-        pstrb = 4'b1111;
+        pstrb = 4'b0000;
         pwdata = 32'h0;
 
         gpio_in_data = 256'h90abcdef00000000;
@@ -55,12 +55,12 @@ module gpio_ctrl_top_tb;
         #200;
 
 		// Test GPIO output
-
         @apb_clk;
         apb_clk.paddr <= 10'h4;
         apb_clk.pwrite <= 1'b1;
         apb_clk.psel <= 1'b1;
         apb_clk.pwdata <= 32'h12345678;
+		apb_clk.pstrb <= 4'b1111;
         @apb_clk;
         apb_clk.penable <= 1'b1;
         @apb_clk;
@@ -71,7 +71,6 @@ module gpio_ctrl_top_tb;
         #100;
 
 		// Test GPIO input
-
         @apb_clk;
         apb_clk.paddr <= 10'h18;
         apb_clk.pwrite <= 1'b0;
@@ -86,18 +85,17 @@ module gpio_ctrl_top_tb;
 		#100;
 
 		// Since all interrupts are default disabled, no interrupt shall be triggered on input change
-
 		gpio_in_data = gpio_out_enable | 256'h1_00000000_00000000;
 
 		#100;
 
 		// Enable Rising edge interrupt on 3rd GPIO bank
-
         @apb_clk;
         apb_clk.paddr <= 10'h2C;
         apb_clk.pwrite <= 1'b1;
         apb_clk.psel <= 1'b1;
         apb_clk.pwdata <= 32'hffffffff;
+		apb_clk.pstrb <= 4'b1111;
         @apb_clk;
         apb_clk.penable <= 1'b1;
         @apb_clk;
@@ -108,13 +106,41 @@ module gpio_ctrl_top_tb;
 		#100;
 
 		// Rising edge on a pin
-
 		gpio_in_data = gpio_out_enable | 256'h3_00000000_00000000;
 
 		#100;
 
 		// Read interrupt status register
+        @apb_clk;
+        apb_clk.paddr <= 10'h200;
+        apb_clk.pwrite <= 1'b0;
+        apb_clk.psel <= 1'b1;
+        @apb_clk;
+        apb_clk.penable <= 1'b1;
+        @apb_clk;
+        apb_clk.psel <= 1'b0;
+        apb_clk.penable <= 1'b0;
+        @apb_clk;
 
+		#100;
+
+		// Attempt to clear interrupt, but do not byte enable
+        @apb_clk;
+        apb_clk.paddr <= 10'h200;
+        apb_clk.pwrite <= 1'b1;
+        apb_clk.psel <= 1'b1;
+        apb_clk.pwdata <= 32'h00000004;
+		apb_clk.pstrb <= 4'b1110;
+        @apb_clk;
+        apb_clk.penable <= 1'b1;
+        @apb_clk;
+        apb_clk.psel <= 1'b0;
+        apb_clk.penable <= 1'b0;
+        @apb_clk;
+
+		#100;
+
+		// Read interrupt status register
         @apb_clk;
         apb_clk.paddr <= 10'h200;
         apb_clk.pwrite <= 1'b0;
@@ -129,12 +155,26 @@ module gpio_ctrl_top_tb;
 		#100;
 
 		// Clear interrupt
-
         @apb_clk;
         apb_clk.paddr <= 10'h200;
         apb_clk.pwrite <= 1'b1;
         apb_clk.psel <= 1'b1;
         apb_clk.pwdata <= 32'h00000004;
+		apb_clk.pstrb <= 4'b1111;
+        @apb_clk;
+        apb_clk.penable <= 1'b1;
+        @apb_clk;
+        apb_clk.psel <= 1'b0;
+        apb_clk.penable <= 1'b0;
+        @apb_clk;
+
+		#100;
+
+		// Read interrupt status register
+        @apb_clk;
+        apb_clk.paddr <= 10'h200;
+        apb_clk.pwrite <= 1'b0;
+        apb_clk.psel <= 1'b1;
         @apb_clk;
         apb_clk.penable <= 1'b1;
         @apb_clk;

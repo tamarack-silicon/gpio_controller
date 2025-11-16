@@ -42,7 +42,6 @@ module gpio_ctrl_top #(
 	logic		 intr_status_pslverr;
 
 	logic [NUM_BANKS-1:0] edge_detected;
-	logic [NUM_BANKS-1:0] per_bank_interrupt;
 
 	// APB bridge
 	gpio_ctrl_apb_bridge #(
@@ -100,11 +99,9 @@ module gpio_ctrl_top #(
 		.pslverr(intr_status_pslverr),
 		// Pulse input from edge detector
 		.edge_detected(edge_detected),
-		// Per-bank interrupt signal
-		.interrupt(per_bank_interrupt)
+		// Interrupt signal
+		.interrupt(interrupt)
 	);
-
-	assign interrupt = |per_bank_interrupt;
 
 	for(genvar i = 0; i < NUM_BANKS; i++) begin : per_bank_gen
 
