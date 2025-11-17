@@ -2,7 +2,7 @@
 IP_NAME := gpio_controller
 
 # CSR Block Name
-CSR_BLOCK_NAME := gpio_ctrl_csr
+CSR_BLOCK_NAME := gpio_ctrl_bank_csr
 
 # Design IP dependency in 'ip' folder
 RTL_IP_DEP := 
@@ -17,13 +17,13 @@ VERIF_IP_DEP :=
 VERIF_REPO_DEP := 
 
 # RTL top level module name
-RTL_TOP_NAME := gpio_controller
+RTL_TOP_NAME := gpio_ctrl_top
+
+# Default testbench name
+TB_NAME := gpio_ctrl_top_tb
 
 # Testbench top level module name
 VERIF_TOP_NAME := gpio_controller_verif_tb
-
-# Default testbench name
-TB_NAME := gpio_controller_tb
 
 # Default UVM test name
 TEST := gpio_controller_test

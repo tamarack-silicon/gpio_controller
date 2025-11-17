@@ -6,7 +6,7 @@ module gpio_controller_verif_tb;
 	apb_if i_apb_if(.clk(clk));
 	gpio_if i_gpio_if(.clk(clk));
 
-	gpio_controller u_gpio_ctrl (
+	gpio_ctrl_top u_dut (
 		.clk(clk),
 		.rst_n(i_rst_if.dut.rst_n),
 		.paddr(i_apb_if.completer.paddr),

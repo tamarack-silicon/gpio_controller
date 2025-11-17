@@ -1,8 +1,9 @@
-module gpio_controller_tb;
+module gpio_ctrl_top_tb;
 
     logic        clk;
     logic        rst_n;
-    logic [10:0] paddr;
+
+    logic [9:0] paddr;
     logic        pwrite;
     logic        psel;
     logic        penable;
@@ -18,7 +19,9 @@ module gpio_controller_tb;
     logic [255:0] gpio_out_data;
 	logic [255:0] gpio_out_enable;
 
-    gpio_controller u_gpio_controller (.*);
+    gpio_ctrl_top #(
+		.NUM_BANKS(8)
+	) u_dut (.*);
 
     clocking apb_clk @(posedge clk);
 
@@ -38,11 +41,11 @@ module gpio_controller_tb;
     initial begin
         rst_n = 1'b0;
 
-        paddr = 11'h0;
+        paddr = 10'h0;
         pwrite = 1'b0;
         psel = 1'b0;
         penable = 1'b0;
-        pstrb = 4'b1111;
+        pstrb = 4'b0000;
         pwdata = 32'h0;
 
         gpio_in_data = 256'h90abcdef00000000;
@@ -52,12 +55,12 @@ module gpio_controller_tb;
         #200;
 
 		// Test GPIO output
-
         @apb_clk;
-        apb_clk.paddr <= 11'h0;
+        apb_clk.paddr <= 10'h4;
         apb_clk.pwrite <= 1'b1;
         apb_clk.psel <= 1'b1;
         apb_clk.pwdata <= 32'h12345678;
+		apb_clk.pstrb <= 4'b1111;
         @apb_clk;
         apb_clk.penable <= 1'b1;
         @apb_clk;
@@ -68,9 +71,8 @@ module gpio_controller_tb;
         #100;
 
 		// Test GPIO input
-
         @apb_clk;
-        apb_clk.paddr <= 11'h204;
+        apb_clk.paddr <= 10'h18;
         apb_clk.pwrite <= 1'b0;
         apb_clk.psel <= 1'b1;
         @apb_clk;
@@ -83,18 +85,17 @@ module gpio_controller_tb;
 		#100;
 
 		// Since all interrupts are default disabled, no interrupt shall be triggered on input change
-
 		gpio_in_data = gpio_out_enable | 256'h1_00000000_00000000;
 
 		#100;
 
 		// Enable Rising edge interrupt on 3rd GPIO bank
-
         @apb_clk;
-        apb_clk.paddr <= 11'h308;
+        apb_clk.paddr <= 10'h2C;
         apb_clk.pwrite <= 1'b1;
         apb_clk.psel <= 1'b1;
         apb_clk.pwdata <= 32'hffffffff;
+		apb_clk.pstrb <= 4'b1111;
         @apb_clk;
         apb_clk.penable <= 1'b1;
         @apb_clk;
@@ -105,15 +106,43 @@ module gpio_controller_tb;
 		#100;
 
 		// Rising edge on a pin
-
 		gpio_in_data = gpio_out_enable | 256'h3_00000000_00000000;
 
 		#100;
 
 		// Read interrupt status register
-
         @apb_clk;
-        apb_clk.paddr <= 11'h500;
+        apb_clk.paddr <= 10'h200;
+        apb_clk.pwrite <= 1'b0;
+        apb_clk.psel <= 1'b1;
+        @apb_clk;
+        apb_clk.penable <= 1'b1;
+        @apb_clk;
+        apb_clk.psel <= 1'b0;
+        apb_clk.penable <= 1'b0;
+        @apb_clk;
+
+		#100;
+
+		// Attempt to clear interrupt, but do not byte enable
+        @apb_clk;
+        apb_clk.paddr <= 10'h200;
+        apb_clk.pwrite <= 1'b1;
+        apb_clk.psel <= 1'b1;
+        apb_clk.pwdata <= 32'h00000004;
+		apb_clk.pstrb <= 4'b1110;
+        @apb_clk;
+        apb_clk.penable <= 1'b1;
+        @apb_clk;
+        apb_clk.psel <= 1'b0;
+        apb_clk.penable <= 1'b0;
+        @apb_clk;
+
+		#100;
+
+		// Read interrupt status register
+        @apb_clk;
+        apb_clk.paddr <= 10'h200;
         apb_clk.pwrite <= 1'b0;
         apb_clk.psel <= 1'b1;
         @apb_clk;
@@ -126,12 +155,26 @@ module gpio_controller_tb;
 		#100;
 
 		// Clear interrupt
-
         @apb_clk;
-        apb_clk.paddr <= 11'h500;
+        apb_clk.paddr <= 10'h200;
         apb_clk.pwrite <= 1'b1;
         apb_clk.psel <= 1'b1;
         apb_clk.pwdata <= 32'h00000004;
+		apb_clk.pstrb <= 4'b1111;
+        @apb_clk;
+        apb_clk.penable <= 1'b1;
+        @apb_clk;
+        apb_clk.psel <= 1'b0;
+        apb_clk.penable <= 1'b0;
+        @apb_clk;
+
+		#100;
+
+		// Read interrupt status register
+        @apb_clk;
+        apb_clk.paddr <= 10'h200;
+        apb_clk.pwrite <= 1'b0;
+        apb_clk.psel <= 1'b1;
         @apb_clk;
         apb_clk.penable <= 1'b1;
         @apb_clk;
@@ -153,8 +196,8 @@ module gpio_controller_tb;
     end
 
     initial begin
-        $dumpfile("gpio_controller_tb.vcd");
+        $dumpfile("gpio_ctrl_top_tb.vcd");
         $dumpvars;
     end
 
-endmodule // gpio_controller_tb
+endmodule // gpio_ctrl_top_tb

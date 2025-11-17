@@ -1,0 +1,50 @@
+addrmap gpio_ctrl_bank_csr {
+    name = "GPIO Controller Bank CSRs";
+    desc = "GPIO Controller Bank CSRs";
+
+    default regwidth = 32;
+    default sw = rw;
+    default hw = r;
+
+    reg output_enable_r {
+        name = "Output Enable Register";
+
+        field {
+            desc = "Output enable";
+        } oenable[31:0] = 0;
+
+    };
+
+	reg output_data_r {
+        name = "Output Data Register";
+
+        field {
+            desc = "Output data";
+        } odata[31:0] = 0;
+
+    };
+
+    reg input_data_r {
+        name = "Input Data Register";
+
+        field {
+            desc = "Input value";
+            sw = r;
+			hw = w;
+        } idata[31:0];
+
+    };
+
+	reg level_change_intr_enable_r {
+		name = "Level-Change Interrupt Enable Register";
+
+		field {
+			desc = "Interrupt Enable";
+		} intr_enable[31:0];
+	};
+
+	output_enable_r output_enable @ 0x0;
+	output_data_r output_data @ 0x4;
+	input_data_r input_data @ 0x8;
+	level_change_intr_enable_r intr_enable @ 0xC;
+};
