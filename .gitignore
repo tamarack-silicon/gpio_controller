@@ -1,7 +1,3 @@
-# Output directory
-netlist
-deliverable
-
 # Temporary file lists
 rtl_filelist.f
 verif_filelist.f
@@ -9,8 +5,9 @@ verif_filelist.f
 # Simulation flow temporary files
 sim
 
-# Synthesis flow temporary files
+# Synthesis and Implementation flow temporary files
 abc.history
+dataout
 
 # Formal verification flow temporary files
 symbiyosys.sby
