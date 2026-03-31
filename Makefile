@@ -26,6 +26,6 @@ TB_NAME := gpio_ctrl_top_tb
 VERIF_TOP_NAME := gpio_controller_verif_tb
 
 # Default UVM test name
-TEST := gpio_controller_test
+TEST := gpio_controller_base_test
 
 include ip/flows/digital-ip.mk
