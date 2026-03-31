@@ -119,7 +119,6 @@ package apb_agent_pkg;
 					m_item.prdata = apb_vif.prdata;
 					m_item.pslverr = apb_vif.pslverr;
 
-					m_item.print();
 					mon_analysis_port.write(m_item);
 				end
 			end
