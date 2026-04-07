@@ -4,3 +4,6 @@
 [submodule "ip/uvm"]
 	path = ip/uvm
 	url = https://github.com/accellera-official/uvm-core.git
+[submodule "ip/gpio_vip"]
+	path = ip/gpio_vip
+	url = https://github.com/tamarack-silicon/gpio_vip.git

@@ -11,7 +11,7 @@ RTL_IP_DEP :=
 RTL_REPO_DEP := 
 
 # Verification IP dependency in 'ip' folder
-VERIF_IP_DEP := 
+VERIF_IP_DEP := gpio_vip
 
 # Verification IP dependency in same folder as current ip
 VERIF_REPO_DEP := 

@@ -1,9 +1,6 @@
 apb/apb_if.sv
 apb/apb_agent_pkg.sv
 
-gpio/gpio_if.sv
-gpio/gpio_agent_pkg.sv
-
 rst/rst_if.sv
 
 gpio_ctrl_bank_csr_ral_pkg.sv
