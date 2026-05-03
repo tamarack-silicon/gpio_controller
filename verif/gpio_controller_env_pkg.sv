@@ -4,16 +4,19 @@ package gpio_controller_env_pkg;
 
 	import uvm_pkg::*;
 	import apb_agent_pkg::*;
-	import gpio_agent_pkg::*;
+	import tamarack_gpio_agent_pkg::*;
 	import gpio_ctrl_csr_ral_pkg::*;
 	import gpio_controller_reg_env_pkg::*;
+
+	localparam integer CFG_NUM_BANKS = `CFG_NUM_BANKS;
+	localparam integer WIDTH = CFG_NUM_BANKS * 32;
 
 	class gpio_controller_env extends uvm_env;
 
 		`uvm_component_utils(gpio_controller_env)
 
 		apb_agent m_apb_agent;
-		gpio_agent m_gpio_agent;
+		tamarack_gpio_agent#(.WIDTH(WIDTH)) m_gpio_agent;
 		gpio_controller_reg_env m_reg_env;
 
 		function new(string name = "gpio_controller_env", uvm_component parent = null);
@@ -24,7 +27,7 @@ package gpio_controller_env_pkg;
 			super.build_phase(phase);
 
 			m_apb_agent = apb_agent::type_id::create("m_apb_agent", this);
-			m_gpio_agent = gpio_agent::type_id::create("m_gpio_agent", this);
+			m_gpio_agent = tamarack_gpio_agent#(.WIDTH(WIDTH))::type_id::create("m_gpio_agent", this);
 			m_reg_env = gpio_controller_reg_env::type_id::create("m_reg_env", this);
 			uvm_reg::include_coverage("*", UVM_CVR_ALL);
 		endfunction // build_phase
