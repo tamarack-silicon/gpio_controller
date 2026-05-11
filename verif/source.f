@@ -13,3 +13,4 @@ gpio_controller_env_pkg.sv
 
 tests/gpio_controller_base_test_pkg.sv
 tests/gpio_controller_reg_test_pkg.sv
+tests/gpio_controller_output_test_pkg.sv

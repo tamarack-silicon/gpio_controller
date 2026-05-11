@@ -27,6 +27,13 @@ package gpio_controller_base_test_pkg;
 			end
 		endfunction // build_phase
 
+		virtual function void end_of_elaboration_phase(uvm_phase phase);
+			super.end_of_elaboration_phase(phase);
+
+			`uvm_info("GPIO_CONTROLLER_BASE_TEST", "Test topology:", UVM_HIGH)
+			this.print();
+		endfunction // end_of_elaboration_phase
+
 		task apply_reset();
 			`uvm_info("TEST", $sformatf("begin reset"), UVM_HIGH)
 			rst_vif.rst_n = 1'b0; // FIXME modport
