@@ -11,7 +11,7 @@ RTL_IP_DEP :=
 RTL_REPO_DEP := 
 
 # Verification IP dependency in 'ip' folder
-VERIF_IP_DEP := 
+VERIF_IP_DEP := gpio_vip
 
 # Verification IP dependency in same folder as current ip
 VERIF_REPO_DEP := 
@@ -26,6 +26,6 @@ TB_NAME := gpio_ctrl_top_tb
 VERIF_TOP_NAME := gpio_controller_verif_tb
 
 # Default UVM test name
-TEST := gpio_controller_test
+TEST := gpio_controller_base_test
 
 include ip/flows/digital-ip.mk

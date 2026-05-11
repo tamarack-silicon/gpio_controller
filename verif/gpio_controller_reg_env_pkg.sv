@@ -45,14 +45,14 @@ package gpio_controller_reg_env_pkg;
 			super.new(name, parent);
 		endfunction // new
 
-		gpio_ctrl_csr m_ral_model;
+		gpio_ctrl_csr#(8) m_ral_model;
 		reg2apb_adapter m_reg2apb;
 		uvm_reg_predictor#(apb_item) m_apb2reg_predictor;
 
 		virtual function void build_phase(uvm_phase phase);
 			super.build_phase(phase);
 
-			m_ral_model = gpio_ctrl_csr::type_id::create("m_ral_model", this);
+			m_ral_model = gpio_ctrl_csr#(8)::type_id::create("m_ral_model", this);
 			m_reg2apb = reg2apb_adapter::type_id::create("m_reg2apb");
 			m_apb2reg_predictor = uvm_reg_predictor#(apb_item)::type_id::create("m_reg2apb_predictor", this);
 
