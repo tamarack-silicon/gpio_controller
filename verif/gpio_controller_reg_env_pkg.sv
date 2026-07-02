@@ -4,7 +4,7 @@ package gpio_controller_reg_env_pkg;
 
 	import uvm_pkg::*;
 	import gpio_ctrl_csr_ral_pkg::*;
-	import apb_agent_pkg::*;
+	import tamarack_apb_agent_pkg::*;
 
 	class reg2apb_adapter extends uvm_reg_adapter;
 
@@ -15,7 +15,7 @@ package gpio_controller_reg_env_pkg;
 		endfunction // new
 
 		virtual function uvm_sequence_item reg2bus(const ref uvm_reg_bus_op rw);
-			apb_item m_item = apb_item::type_id::create("apb_item");
+			tamarack_apb_item#(.ADDR_WIDTH(10), .DATA_WIDTH(32)) m_item = tamarack_apb_item#(.ADDR_WIDTH(10), .DATA_WIDTH(32))::type_id::create("apb_item");
 			m_item.paddr = rw.addr;
 			m_item.pwrite = (rw.kind == UVM_WRITE) ? 1'b1 : 1'b0;
 			m_item.pstrb = rw.byte_en;
@@ -25,7 +25,7 @@ package gpio_controller_reg_env_pkg;
 		endfunction // reg2bus
 
 		virtual function bus2reg(uvm_sequence_item bus_item, ref uvm_reg_bus_op rw);
-			apb_item m_item;
+			tamarack_apb_item#(.ADDR_WIDTH(10), .DATA_WIDTH(32)) m_item;
 			if(!$cast(m_item, bus_item)) begin
 				`uvm_fatal("reg2apb_adapter", "failed cast")
 			end
@@ -47,14 +47,14 @@ package gpio_controller_reg_env_pkg;
 
 		gpio_ctrl_csr#(8) m_ral_model;
 		reg2apb_adapter m_reg2apb;
-		uvm_reg_predictor#(apb_item) m_apb2reg_predictor;
+		uvm_reg_predictor#(tamarack_apb_item#(.ADDR_WIDTH(10), .DATA_WIDTH(32))) m_apb2reg_predictor;
 
 		virtual function void build_phase(uvm_phase phase);
 			super.build_phase(phase);
 
 			m_ral_model = gpio_ctrl_csr#(8)::type_id::create("m_ral_model", this);
 			m_reg2apb = reg2apb_adapter::type_id::create("m_reg2apb");
-			m_apb2reg_predictor = uvm_reg_predictor#(apb_item)::type_id::create("m_reg2apb_predictor", this);
+			m_apb2reg_predictor = uvm_reg_predictor#(tamarack_apb_item#(.ADDR_WIDTH(10), .DATA_WIDTH(32)))::type_id::create("m_reg2apb_predictor", this);
 
 			m_ral_model.build();
 			m_ral_model.lock_model();

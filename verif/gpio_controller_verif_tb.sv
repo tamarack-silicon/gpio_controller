@@ -10,7 +10,7 @@ module gpio_controller_verif_tb;
 	logic clk;
 
 	rst_if i_rst_if();
-	apb_if i_apb_if(.clk(clk));
+	tamarack_apb_if#(.ADDR_WIDTH(10), .DATA_WIDTH(32)) i_apb_if(.clk(clk));
 
 	wire [WIDTH-1:0]   bus;
 
@@ -49,7 +49,7 @@ module gpio_controller_verif_tb;
 
 	initial begin
 		uvm_pkg::uvm_config_db#(virtual rst_if)::set(null, "uvm_test_top", "rst_vif", i_rst_if);
-		uvm_pkg::uvm_config_db#(virtual apb_if)::set(null, "uvm_test_top", "apb_vif", i_apb_if);
+		uvm_pkg::uvm_config_db#(virtual tamarack_apb_if#(.ADDR_WIDTH(10), .DATA_WIDTH(32)))::set(null, "uvm_test_top.m_env.m_apb_agent", "apb_vif", i_apb_if);
 		uvm_pkg::uvm_config_db#(virtual tamarack_gpio_if#(.WIDTH(WIDTH)))::set(null, "uvm_test_top.m_env.m_gpio_agent", "gpio_vif", gpio_if_tb);
 		uvm_pkg::run_test();
 	end
