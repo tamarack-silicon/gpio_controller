@@ -32,10 +32,10 @@ package gpio_controller_reg_test_pkg;
 			m_env.m_reg_env.m_ral_model.print();
 
 			m_reg_hw_reset_seq.model = m_env.m_reg_env.m_ral_model;
-			m_reg_hw_reset_seq.start(m_env.m_apb_agent.m_sequencer);
+			m_reg_hw_reset_seq.start(m_env.m_apb_agent.sequencer);
 
 			m_reg_bit_bash_seq.model = m_env.m_reg_env.m_ral_model;
-			m_reg_bit_bash_seq.start(m_env.m_apb_agent.m_sequencer);
+			m_reg_bit_bash_seq.start(m_env.m_apb_agent.sequencer);
 
 			phase.drop_objection(phase);
 		endtask // run_phase

@@ -7,3 +7,6 @@
 [submodule "ip/gpio_vip"]
 	path = ip/gpio_vip
 	url = https://github.com/tamarack-silicon/gpio_vip.git
+[submodule "ip/apb_vip"]
+	path = ip/apb_vip
+	url = https://github.com/tamarack-silicon/apb_vip.git
